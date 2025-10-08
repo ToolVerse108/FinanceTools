@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Tools Hub - Free Financial Calculators</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 36px;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 22px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            margin: 0 auto;
+            max-width: 1400px;
+            border-radius: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            color: white;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Tools Section */
+        .tools-section {
+            background: white;
+            padding: 80px 30px;
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 42px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 50px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 50px 18px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #999;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .category-tab {
+            padding: 12px 28px;
+            border-radius: 50px;
+            background: #f5f5f5;
+            color: #555;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .category-tab:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .category-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .tool-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .tool-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .tool-description {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .tool-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            padding: 80px 30px;
+            color: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .feature-description {
+            font-size: 15px;
+            opacity: 0.95;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: white;
+            padding: 80px 30px;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 42px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .cta-content p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3436;
+            color: white;
+            padding: 60px 30px 30px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .section-header h2 {
+                font-size: 32px;
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .stats {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-tabs {
+                gap: 10px;
+            }
+
+            .category-tab {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">💰</span>
+                <span>Finance Tools Hub</span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <nav id="mainNav">
+                <a href="#home">Home</a>
+                <a href="#tools">Tools</a>
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Smart Financial Planning Made Easy</h1>
+        <p>Free, powerful calculators for all your financial needs. Make informed decisions with our comprehensive suite of tools.</p>
+        <div class="hero-buttons">
+            <a href="#tools" class="btn-primary">Explore Tools</a>
+            <a href="#features" class="btn-secondary">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stat-item">
+            <div class="stat-number">15+</div>
+            <div class="stat-label">Financial Tools</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Free Forever</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">50K+</div>
+            <div class="stat-label">Users Worldwide</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Available</div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="tools-section" id="tools">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Our Financial Calculators</h2>
+                <p>Choose from our comprehensive collection of free financial tools</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search for calculators..." onkeyup="filterTools()">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="category-tabs">
+                <div class="category-tab active" onclick="filterCategory('all')">All Tools</div>
+                <div class="category-tab" onclick="filterCategory('investment')">Investments</div>
+                <div class="category-tab" onclick="filterCategory('retirement')">Retirement</div>
+                <div class="category-tab" onclick="filterCategory('savings')">Savings</div>
+                <div class="category-tab" onclick="filterCategory('loan')">Loans</div>
+            </div>
+
+            <!-- Tools Grid -->
+            <div class="tools-grid" id="toolsGrid">
+                <!-- SIP Calculator -->
+                <div class="tool-card" data-category="investment">
+                    <div class="tool-icon">📈</div>
+                    <div class="tool-title">SIP Calculator</div>
+                    <div class="tool-description">Calculate returns on your systematic investment plans with monthly contributions and compound growth.</div>
+                    <div>
+                        <span class="tool-tag">Investment</span>
+                        <span class="tool-tag">Popular</span>
+                    </div>
+                </div>
+
+                <!-- Lumpsum Calculator -->
+                <a href="lumpsum-calculator.html" class="tool-card" data-category="investment" style="text-decoration: none; color: inherit;">
+    <div class="tool-icon">💰</div>
+    <div class="tool-title">Lumpsum Calculator</div>
+    <div class="tool-description">Calculate future value of your one-time investment with compound interest over time.</div>
+    <div>
+        <span class="tool-tag">Investment</span>
+    </div>
+</a>
+ 
+                <!-- SWP Calculator -->
+                <div class="tool-card" data-category="retirement">
+                    <div class="tool-icon">💸</div>
+                    <div class="tool-title">SWP Calculator</div>
+                    <div class="tool-description">Plan systematic withdrawals from your investments while earning returns on remaining corpus.</div>
+                    <div>
+                        <span class="tool-tag">Retirement</span>
+                    </div>
+                </div>
+
+                <!-- STP Calculator -->
+                <div class="tool-card" data-category="investment">
+                    <div class="tool-icon">🔄</div>
+                    <div class="tool-title">STP Calculator</div>
+                    <div class="tool-description">Transfer funds systematically between schemes while optimizing returns on both portfolios.</div>
+                    <div>
+                        <span class="tool-tag">Investment</span>
+                    </div>
+                </div>
+
+                <!-- Mutual Fund Return Calculator -->
+                <div class="tool-card" data-category="investment">
+                    <div class="tool-icon">📊</div>
+                    <div class="tool-title">Mutual Fund Returns</div>
+                    <div class="tool-description">Calculate CAGR and absolute returns on your mutual fund investments accurately.</div>
+                    <div>
+                        <span class="tool-tag">Investment</span>
+                        <span class="tool-tag">Popular</span>
+                    </div>
+                </div>
+
+                <!-- NPS Calculator -->
+                <div class="tool-card" data-category="retirement">
+                    <div class="tool-icon">🏦</div>
+                    <div class="tool-title">NPS Calculator</div>
+                    <div class="tool-description">Plan your retirement with National Pension System projections and monthly pension estimates.</div>
+                    <div>
+                        <span class="tool-tag">Retirement</span>
+                    </div>
+                </div>
+
+                <!-- PPF Calculator -->
+                <div class="tool-card" data-category="savings">
+                    <div class="tool-icon">🏛️</div>
+                    <div class="tool-title">PPF Calculator</div>
+                    <div class="tool-description">Calculate Public Provident Fund maturity with tax-free returns and government backing.</div>
+                    <div>
+                        <span class="tool-tag">Savings</span>
+                        <span class="tool-tag">Tax Free</span>
+                    </div>
+                </div>
+
+                <!-- EPF Calculator -->
+                <div class="tool-card" data-category="retirement">
+                    <div class="tool-icon">💼</div>
+                    <div class="tool-title">EPF Calculator</div>
+                    <div class="tool-description">Employee Provident Fund calculator with employer contribution and interest projections.</div>
+                    <div>
+                        <span class="tool-tag">Retirement</span>
+                    </div>
+                </div>
+
+                <!-- RD Calculator -->
+                <div class="tool-card" data-category="savings">
+                    <div class="tool-icon">🏦</div>
+                    <div class="tool-title">RD Calculator</div>
+                    <div class="tool-description">Recurring Deposit calculator for disciplined monthly savings with guaranteed returns.</div>
+                    <div>
+                        <span class="tool-tag">Savings</span>
+                    </div>
+                </div>
+
+                <!-- FD Calculator -->
+                <div class="tool-card" data-category="savings">
+                    <div class="tool-icon">💎</div>
+                    <div class="tool-title">FD Calculator</div>
+                    <div class="tool-description">Fixed Deposit calculator with quarterly compounding and maturity amount projections.</div>
+                    <div>
+                        <span class="tool-tag">Savings</span>
+                        <span class="tool-tag">Safe</span>
+                    </div>
+                </div>
+
+                <!-- EMI Calculator -->
+                <div class="tool-card" data-category="loan">
+                    <div class="tool-icon">🏠</div>
+                    <div class="tool-title">EMI Calculator</div>
+                    <div class="tool-description">Calculate monthly installments for home, car, or personal loans with amortization schedule.</div>
+                    <div>
+                        <span class="tool-tag">Loan</span>
+                        <span class="tool-tag">Popular</span>
+                    </div>
+                </div>
+
+                <!-- Retirement Calculator -->
+                <div class="tool-card" data-category="retirement">
+                    <div class="tool-icon">🌴</div>
+                    <div class="tool-title">Retirement Planner</div>
+                    <div class="tool-description">Comprehensive retirement planning with inflation adjustments and corpus requirements.</div>
+                    <div>
+                        <span class="tool-tag">Retirement</span>
+                    </div>
+                </div>
+
+                <!-- Tax Calculator -->
+                <div class="tool-card" data-category="savings">
+                    <div class="tool-icon">📋</div>
+                    <div class="tool-title">Tax Calculator</div>
+                    <div class="tool-description">Calculate income tax liabilities under old and new tax regimes with deductions.</div>
+                    <div>
+                        <span class="tool-tag">Tax</span>
+                    </div>
+                </div>
+
+                <!-- CAGR Calculator -->
+                <div class="tool-card" data-category="investment">
+                    <div class="tool-icon">📉</div>
+                    <div class="tool-title">CAGR Calculator</div>
+                    <div class="tool-description">Calculate Compound Annual Growth Rate for your investments and track performance.</div>
+                    <div>
+                        <span class="tool-tag">Investment</span>
+                    </div>
+                </div>
+
+                <!-- HRA Calculator -->
+                <div class="tool-card" data-category="savings">
+                    <div class="tool-icon">🏢</div>
+                    <div class="tool-title">HRA Calculator</div>
+                    <div class="tool-description">Calculate House Rent Allowance exemption and optimize your tax savings effectively.</div>
+                    <div>
+                        <span class="tool-tag">Tax</span>
+                    </div>
+                </div>
+
+                <!-- Gratuity Calculator -->
+                <div class="tool-card" data-category="retirement">
+                    <div class="tool-icon">🎁</div>
+                    <div class="tool-title">Gratuity Calculator</div>
+                    <div class="tool-description">Calculate gratuity amount based on salary and years of service at retirement.</div>
+                    <div>
+                        <span class="tool-tag">Retirement</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 style="color: white;">Why Choose Our Tools?</h2>
+                <p style="color: rgba(255,255,255,0.95);">Professional-grade calculators designed for accuracy and ease of use</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">100% Accurate</div>
+                    <div class="feature-description">Industry-standard formulas ensure precise calculations every time</div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🚀</div>
+                    <div class="feature-title">Lightning Fast</div>
+                    <div class="feature-description">Real-time calculations with instant results as you type</div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-title">Mobile Friendly</div>
+                    <div class="feature-description">Fully responsive design works perfectly on all devices</div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-title">100% Private</div>
+                    <div class="feature-description">All calculations happen locally - no data stored or shared</div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">💯</div>
+                    <div class="feature-title">Always Free</div>
+                    <div class="feature-description">No hidden charges, no subscriptions - completely free forever</div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">Beautiful Design</div>
+                    <div class="feature-description">Modern, intuitive interface makes financial planning enjoyable</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Take Control of Your Finances?</h2>
+            <p>Start using our free calculators today and make smarter financial decisions for a better tomorrow.</p>
+            <a href="#tools" class="btn-primary">Get Started Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Finance Tools Hub</h3>
+                <p style="color: rgba(255,255,255,0.7); margin-top: 15px;">
+                    Your trusted companion for all financial calculations. Free, accurate, and easy to use.
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#tools">All Tools</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Popular Tools</h3>
+                <ul>
+                    <li><a href="#">SIP Calculator</a></li>
+                    <li><a href="#">EMI Calculator</a></li>
+                    <li><a href="#">PPF Calculator</a></li>
+                    <li><a href="#">NPS Calculator</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Financial Guide</a></li>
+                    <li><a href="#">Investment Tips</a></li>
+                    <li><a href="#">Tax Planning</a></li>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Finance Tools Hub. All rights reserved. Made with ❤️ for smarter financial planning.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const nav = document.getElementById('mainNav');
+            nav.classList.toggle('active');
+        }
+
+        // Filter tools by category
+        let currentCategory = 'all';
+
+        function filterCategory(category) {
+            currentCategory = category;
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const cards = document.querySelectorAll('.tool-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Search functionality
+        function filterTools() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.tool-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.tool-title').textContent.toLowerCase();
+                const description = card.querySelector('.tool-description').textContent.toLowerCase();
+                const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                const matchesCategory = currentCategory
