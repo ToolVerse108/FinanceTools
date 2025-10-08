@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumpsum Investment Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .affiliate-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .affiliate-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .icon-graphic {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .icon-graphic svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+        }
+
+        .affiliate-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .affiliate-content h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .affiliate-content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: white;
+            color: #f5576c;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            margin-top: 10px;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #764ba2;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .result-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .future-value {
+            font-size: 28px !important;
+            color: #ffd700;
+        }
+
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .affiliate-content h2 {
+                font-size: 24px;
+            }
+
+            .result-value {
+                font-size: 20px;
+            }
+
+            .future-value {
+                font-size: 24px !important;
+            }
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>💰 Lumpsum Investment Calculator</h1>
+            
+            <div class="input-group">
+                <label for="investment">One-Time Investment Amount (₹)</label>
+                <input type="number" id="investment" value="100000" min="1000" step="1000">
+            </div>
+
+            <div class="input-group">
+                <label for="years">Investment Period (Years): <span id="yearsValue">10</span></label>
+                <input type="range" id="years" min="1" max="30" value="10">
+            </div>
+
+            <div class="input-group">
+                <label for="rate">Expected Annual Return (%): <span id="rateValue">12</span></label>
+                <input type="range" id="rate" min="1" max="30" value="12" step="0.5">
+            </div>
+
+            <div class="results">
+                <div class="result-item">
+                    <span class="result-label">Total Investment</span>
+                    <span class="result-value" id="totalInvestment">₹1,00,000</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Wealth Gain</span>
+                    <span class="result-value" id="wealthGain">₹2,10,585</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Future Value</span>
+                    <span class="result-value future-value" id="futureValue">₹3,10,585</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card affiliate-card">
+            <div class="affiliate-content">
+                <div class="icon-graphic">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ffed4e;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Stack of coins -->
+                        <ellipse cx="100" cy="160" rx="45" ry="12" fill="url(#coinGrad)" opacity="0.6"/>
+                        <ellipse cx="100" cy="150" rx="45" ry="12" fill="url(#coinGrad)" opacity="0.7"/>
+                        <ellipse cx="100" cy="140" rx="45" ry="12" fill="url(#coinGrad)" opacity="0.8"/>
+                        <ellipse cx="100" cy="130" rx="45" ry="12" fill="url(#coinGrad)" opacity="0.9"/>
+                        <ellipse cx="100" cy="120" rx="45" ry="12" fill="url(#coinGrad)"/>
+                        <rect x="55" y="120" width="90" height="8" fill="url(#coinGrad)"/>
+                        
+                        <!-- Growth arrow -->
+                        <path d="M 40 100 Q 80 60 120 40 L 180 30" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+                        <polygon points="180,30 165,25 170,40" fill="white"/>
+                        
+                        <!-- Sparkles -->
+                        <circle cx="150" cy="50" r="3" fill="white" opacity="0.9">
+                            <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="60" cy="80" r="2" fill="white" opacity="0.8">
+                            <animate attributeName="opacity" values="0.2;1;0.2" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="170" cy="70" r="2.5" fill="white" opacity="0.7">
+                            <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                
+                <h2>🚀 Start Your Wealth Journey Today!</h2>
+                <p>Join thousands of smart investors who are growing their wealth with trusted mutual fund platforms. Get expert-curated portfolios, zero commission, and the power to achieve your financial dreams.</p>
+                <p><strong>✨ Special Offer:</strong> Sign up now and get personalized investment recommendations from certified advisors absolutely FREE!</p>
+                <button class="cta-button" onclick="alert('Connect with top investment platforms:\n• Groww\n• Zerodha Coin\n• ET Money\n• Paytm Money\n\nStart investing with as little as ₹100!')">Explore Investment Platforms →</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>💡 Invest wisely, grow consistently. Start your financial freedom journey today!</p>
+    </div>
+
+    <script>
+        const investmentInput = document.getElementById('investment');
+        const yearsInput = document.getElementById('years');
+        const rateInput = document.getElementById('rate');
+        const yearsValue = document.getElementById('yearsValue');
+        const rateValue = document.getElementById('rateValue');
+        const totalInvestmentEl = document.getElementById('totalInvestment');
+        const wealthGainEl = document.getElementById('wealthGain');
+        const futureValueEl = document.getElementById('futureValue');
+
+        function formatCurrency(value) {
+            return '₹' + value.toLocaleString('en-IN', {
+                maximumFractionDigits: 0
+            });
+        }
+
+        function calculateLumpsum() {
+            const principal = parseFloat(investmentInput.value) || 0;
+            const years = parseInt(yearsInput.value);
+            const rate = parseFloat(rateInput.value);
+
+            yearsValue.textContent = years;
+            rateValue.textContent = rate;
+
+            // Future Value = P * (1 + r/100)^n
+            const futureValue = principal * Math.pow(1 + (rate / 100), years);
+            const wealthGain = futureValue - principal;
+
+            totalInvestmentEl.textContent = formatCurrency(principal);
+            wealthGainEl.textContent = formatCurrency(wealthGain);
+            futureValueEl.textContent = formatCurrency(futureValue);
+        }
+
+        investmentInput.addEventListener('input', calculateLumpsum);
+        yearsInput.addEventListener('input', calculateLumpsum);
+        rateInput.addEventListener('input', calculateLumpsum);
+
+        // Initial calculation
+        calculateLumpsum();
+    </script>
+</body>
+</html>
