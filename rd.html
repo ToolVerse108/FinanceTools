@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RD Calculator - Recurring Deposit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .affiliate-card {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffdde1 100%);
+            color: #2d3436;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .affiliate-card::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            animation: float-bubble 10s ease-in-out infinite;
+        }
+
+        @keyframes float-bubble {
+            0%, 100% { 
+                transform: translate(-150px, -150px) scale(1);
+                opacity: 0.5;
+            }
+            33% { 
+                transform: translate(100px, -100px) scale(1.2);
+                opacity: 0.8;
+            }
+            66% { 
+                transform: translate(120px, 120px) scale(0.9);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes coin-drop {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-10px) rotate(180deg); 
+            }
+        }
+
+        .icon-graphic {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            animation: coin-drop 3s ease-in-out infinite;
+        }
+
+        .icon-graphic svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.25));
+        }
+
+        .affiliate-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .affiliate-content h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            color: #2d3436;
+        }
+
+        .affiliate-content p {
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 18px;
+            color: #2d3436;
+        }
+
+        .bank-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 22px 0;
+        }
+
+        .bank-badge {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d3436;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .bank-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: white;
+            padding: 17px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(253, 160, 133, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(253, 160, 133, 0.6);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .trusted-badge {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .trusted-badge::before {
+            content: '🏦';
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 16px 45px 16px 35px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #fda085;
+            box-shadow: 0 0 0 4px rgba(253, 160, 133, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            margin-top: 12px;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fda085;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(253, 160, 133, 0.4);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            background: #f6d365;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fda085;
+            cursor: pointer;
+            border: none;
+        }
+
+        .duration-toggle {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .toggle-btn.active {
+            background: #fda085;
+            color: white;
+            border-color: #fda085;
+        }
+
+        .results {
+            margin-top: 35px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            border-radius: 18px;
+            color: white;
+        }
+
+        .results-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+            opacity: 0.95;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+
+        .result-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .result-item.highlight {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            margin: 10px -15px;
+            border-radius: 12px;
+            border-bottom: none;
+        }
+
+        .result-item.highlight .result-value {
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .info-box {
+            background: rgba(253, 160, 133, 0.1);
+            border-left: 4px solid #fda085;
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+
+        .info-box .icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .info-box .text {
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        .comparison-chart {
+            margin-top: 25px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 150px;
+            gap: 20px;
+        }
+
+        .bar-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bar {
+            width: 100%;
+            background: linear-gradient(to top, #f6d365, #fda085);
+            border-radius: 8px 8px 0 0;
+            transition: all 0.6s ease;
+            box-shadow: 0 -4px 15px rgba(253, 160, 133, 0.3);
+            position: relative;
+        }
+
+        .bar:hover {
+            filter: brightness(1.1);
+            transform: scaleY(1.05);
+        }
+
+        .bar-value {
+            font-size: 11px;
+            font-weight: 700;
+            color: #fda085;
+            margin-bottom: 8px;
+        }
+
+        .bar-label {
+            margin-top: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .affiliate-content h2 {
+                font-size: 24px;
+            }
+
+            .result-value {
+                font-size: 24px;
+            }
+
+            .result-item.highlight .result-value {
+                font-size: 28px;
+            }
+
+            .icon-graphic {
+                width: 130px;
+                height: 130px;
+            }
+
+            .chart-bars {
+                height: 120px;
+            }
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            opacity: 0.95;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .footer strong {
+            color: #fff;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div style="text-align: center;">
+                <span class="trusted-badge">Bank Guaranteed Returns</span>
+            </div>
+            <h1>🏦 RD Calculator</h1>
+            <p class="subtitle">Recurring Deposit - Disciplined Savings Made Easy</p>
+            
+            <div class="input-group">
+                <label for="monthly">Monthly Deposit Amount</label>
+                <div class="input-wrapper">
+                    <span class="input-prefix">₹</span>
+                    <input type="number" id="monthly" value="5000" min="100" step="100">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="duration">Investment Period: <span id="durationValue">36</span> <span id="durationUnit">months</span></label>
+                <input type="range" id="duration" min="6" max="120" value="36">
+                <div class="duration-toggle">
+                    <button class="toggle-btn active" id="monthsBtn" onclick="setDurationUnit('months')">Months</button>
+                    <button class="toggle-btn" id="yearsBtn" onclick="setDurationUnit('years')">Years</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="rate">Expected Interest Rate: <span id="rateValue">6.5</span>%</label>
+                <input type="range" id="rate" min="4.0" max="9.0" value="6.5" step="0.1">
+            </div>
+
+            <div class="info-box">
+                <span class="icon">💡</span>
+                <span class="text">
+                    <strong>Safe Investment:</strong> RD offers guaranteed returns with quarterly compounding. Interest rates vary from 5.5% to 7.5% across banks. Senior citizens get additional 0.5% interest.
+                </span>
+            </div>
+
+            <div class="results">
+                <div class="results-title">📊 Your RD Maturity Summary</div>
+                <div class="result-item">
+                    <span class="result-label">Total Investment</span>
+                    <span class="result-value" id="totalInvestment">₹1,80,000</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Interest Earned</span>
+                    <span class="result-value" id="interestEarned">₹18,322</span>
+                </div>
+                <div class="result-item highlight">
+                    <span class="result-label">💰 Maturity Amount</span>
+                    <span class="result-value" id="maturityAmount">₹1,98,322</span>
+                </div>
+            </div>
+
+            <div class="comparison-chart">
+                <div class="chart-title">Investment vs Returns Breakdown</div>
+                <div class="chart-bars">
+                    <div class="bar-wrapper">
+                        <div class="bar-value" id="investBar">₹1.8L</div>
+                        <div class="bar" id="investmentBar" style="height: 85%;"></div>
+                        <div class="bar-label">Investment</div>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar-value" id="intBar">₹18K</div>
+                        <div class="bar" id="interestBar" style="height: 15%;"></div>
+                        <div class="bar-label">Interest</div>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar-value" id="matBar">₹2.0L</div>
+                        <div class="bar" id="totalBar" style="height: 100%;"></div>
+                        <div class="bar-label">Maturity</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card affiliate-card">
+            <div class="affiliate-content">
+                <div class="icon-graphic">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="piggyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ffed4e;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- Piggy bank body -->
+                        <ellipse cx="100" cy="110" rx="50" ry="40" fill="url(#piggyGrad)"/>
+                        <ellipse cx="100" cy="105" rx="50" ry="40" fill="#ffdde1"/>
+                        
+                        <!-- Piggy bank head -->
+                        <circle cx="130" cy="95" r="22" fill="#ffdde1"/>
+                        
+                        <!-- Snout -->
+                        <ellipse cx="140" cy="95" rx="8" ry="10" fill="#ff9a9e"/>
+                        <circle cx="138" cy="92" r="2" fill="#2d3436"/>
+                        <circle cx="138" cy="98" r="2" fill="#2d3436"/>
+                        
+                        <!-- Eye -->
+                        <circle cx="122" cy="88" r="3" fill="#2d3436"/>
+                        
+                        <!-- Ear -->
+                        <ellipse cx="125" cy="78" rx="6" ry="10" fill="#ffdde1" transform="rotate(-20 125 78)"/>
+                        
+                        <!-- Legs -->
+                        <rect x="70" y="135" width="12" height="20" rx="6" fill="#ff9a9e"/>
+                        <rect x="90" y="135" width="12" height="20" rx="6" fill="#ff9a9e"/>
+                        <rect x="110" y="135" width="12" height="20" rx="6" fill="#ff9a9e"/>
+                        <rect x="130" y="135" width="12" height="20" rx="6" fill="#ff9a9e"/>
+                        
+                        <!-- Tail -->
+                        <path d="M 60 105 Q 45 100 40 95 Q 35 90 40 85" stroke="#ff9a9e" stroke-width="5" fill="none" stroke-linecap="round"/>
+                        
+                        <!-- Coin slot -->
+                        <rect x="90" y="85" width="20" height="4" rx="2" fill="#2d3436"/>
+                        
+                        <!-- Coins dropping in (animated) -->
+                        <g id="coin1">
+                            <ellipse cx="100" cy="60" rx="10" ry="3" fill="url(#coinGrad)">
+                                <animate attributeName="cy" values="60;85;60" dur="2s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <text x="100" y="62" font-family="Arial" font-size="8" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                        </g>
+                        
+                        <g id="coin2">
+                            <ellipse cx="115" cy="50" rx="8" ry="2.5" fill="url(#coinGrad)">
+                                <animate attributeName="cy" values="50;85;50" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="1;0.5;1" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <text x="115" y="52" font-family="Arial" font-size="7" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                        </g>
+                        
+                        <g id="coin3">
+                            <ellipse cx="85" cy="55" rx="8" ry="2.5" fill="url(#coinGrad)">
+                                <animate attributeName="cy" values="55;85;55" dur="2.2s" begin="1s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="1;0.5;1" dur="2.2s" begin="1s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <text x="85" y="57" font-family="Arial" font-size="7" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                        </g>
+                        
+                        <!-- Calendar icon (representing monthly deposits) -->
+                        <rect x="155" y="70" width="30" height="35" rx="3" fill="white" stroke="#fda085" stroke-width="2"/>
+                        <rect x="155" y="70" width="30" height="8" rx="3" fill="#fda085"/>
+                        <line x1="162" y1="82" x2="178" y2="82" stroke="#ff9a9e" stroke-width="2"/>
+                        <line x1="162" y1="88" x2="178" y2="88" stroke="#ff9a9e" stroke-width="2"/>
+                        <line x1="162" y1="94" x2="178" y2="94" stroke="#ff9a9e" stroke-width="2"/>
+                        
+                        <!-- Sparkles -->
+                        <circle cx="160" cy="120" r="3" fill="#ffd700">
+                            <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="50" cy="90" r="2.5" fill="#ffd700">
+                            <animate attributeName="opacity" values="0.2;1;0.2" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="175" cy="50" r="2" fill="#ffd700">
+                            <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" begin="1s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                
+                <h2>🎯 Save Smartly Every Month!</h2>
+                <p>RD helps you build wealth through disciplined monthly savings. Get guaranteed returns with the safety of bank deposits!</p>
+                
+                <div class="bank-logos">
+                    <span class="bank-badge">🏦 SBI</span>
+                    <span class="bank-badge">🏦 HDFC</span>
+                    <span class="bank-badge">🏦 ICICI</span>
+                    <span class="bank-badge">🏦 Axis</span>
+                    <span class="bank-badge">🏦 PNB</span>
+                    <span class="bank-badge">🏦 Kotak</span>
+                </div>
+                
+                <p><strong>✨ Why Choose RD?</strong></p>
+                <p style="font-size: 14px; margin: 15px 0; line-height: 1.9;">
+                    ✓ Guaranteed returns - Zero risk<br>
+                    ✓ Flexible tenure (6 months - 10 years)<br>
+                    ✓ Loan facility up to 90% of deposit<br>
+                    ✓ Auto-debit for hassle-free saving<br>
+                    ✓ Premature withdrawal available
+                </p>
+                
+                <button class="cta-button" onclick="alert('🏦 Open Your RD Account Today!\n\n✅ Top Banks Offering RD:\n• SBI - 6.5% to 7.5% interest\n• HDFC Bank - Flexible tenures\n• ICICI Bank - Online RD facility\n• Axis Bank - High interest for seniors\n• PNB - Special women schemes\n• Kotak Mahindra - Digital RD\n\n💡 Documents Required:\n• PAN Card\n• Aadhaar Card\n• Address Proof\n• Passport size photos\n• Savings account\n\n🎯 Features:\n• Monthly auto-debit\n• Quarterly compounding\n• Nomination facility\n• Tax benefits (5-year RD under 80C)\n• E-statements available\n\n📞 Start with just ₹500/month!')">Open RD Account →</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>💰 <strong>Small Savings, Big Dreams!</strong> Start your RD journey today and watch your money grow steadily.</p>
+    </div>
+
+    <script>
+        let durationUnit = 'months';
+
+        const monthlyInput = document.getElementById('monthly');
+        const durationInput = document.getElementById('duration');
+        const rateInput = document.getElementById('rate');
+        const durationValue = document.getElementById('durationValue');
+        const durationUnitSpan = document.getElementById('durationUnit');
+        const rateValue = document.getElementById('rateValue');
+        
+        const totalInvestmentEl = document.getElementById('totalInvestment');
+        const interestEarnedEl = document.getElementById('interestEarned');
+        const maturityAmountEl = document.getElementById('maturityAmount');
+
+        function formatCurrency(value) {
+            return '₹' + value.toLocaleString('en-IN', {
+                maximumFractionDigits: 0
+            });
+        }
+
+        function formatCurrencyShort(value) {
+            if (value >= 10000000) {
+                return '₹' + (value / 10000000).toFixed(1) + ' Cr';
+            } else if (value >= 100000) {
+                return '₹' + (value / 100000).toFixed(1) + 'L';
+            } else if (value >= 1000) {
+                return '₹' + (value / 1000).toFixed(0) + 'K';
+            }
+            return formatCurrency(value);
+        }
+
+        function setDurationUnit(unit) {
+            durationUnit = unit;
+            const monthsBtn = document.getElementById('monthsBtn');
+            const yearsBtn = document.getElementById('yearsBtn');
+            
+            if (unit === 'years') {
+                monthsBtn.classList.remove('active');
+                yearsBtn.classList.add('active');
+                durationInput.max = 10;
+                durationInput.value = Math.min(Math.ceil(durationInput.value / 12), 10);
+            } else {
+                yearsBtn.classList.remove('active');
+                monthsBtn.classList.add('active');
+                durationInput.max = 120;
+            }
+            
+            durationUnitSpan.textContent = unit;
+            calculateRD();
+        }
+
+        function calculateRD() {
+            const monthlyDeposit = parseFloat(monthlyInput.value) || 0;
+            let duration = parseInt(durationInput.value);
+            const annualRate = parseFloat(rateInput.value);
+
+            // Convert to months if in years
+            const totalMonths = durationUnit === 'years' ? duration * 12 : duration;
+            
+            durationValue.textContent = duration;
+            rateValue.textContent = annualRate.toFixed(1);
+
+            // RD Maturity Formula: M = P × n × (n + 1) / 2 × (1 + i/4)
+            // Where quarterly compounding is considered
+            // Simplified formula: Using month-wise calculation for accuracy
+            
+            const quarterlyRate = annualRate / 4 / 100;
+            let maturityAmount = 0;
+            
+            // Calculate for each monthly deposit
+            for (let month = 1; month <= totalMonths; month++) {
+                const
