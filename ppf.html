@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPF Calculator - Public Provident Fund</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .affiliate-card {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            color: #2d3436;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .affiliate-card::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            animation: float-around 6s ease-in-out infinite;
+        }
+
+        @keyframes float-around {
+            0%, 100% { 
+                transform: translate(-50px, -50px) scale(1);
+                opacity: 0.6;
+            }
+            25% { 
+                transform: translate(50px, -30px) scale(1.1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translate(60px, 40px) scale(1);
+                opacity: 0.6;
+            }
+            75% { 
+                transform: translate(-40px, 50px) scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes grow {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .icon-graphic {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            animation: grow 4s ease-in-out infinite;
+        }
+
+        .icon-graphic svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+        }
+
+        .affiliate-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .affiliate-content h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            color: #2d3436;
+        }
+
+        .affiliate-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+
+        .feature-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3436;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 17px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(17, 153, 142, 0.6);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .gov-badge {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .gov-badge::before {
+            content: '🏛️';
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 16px 45px 16px 35px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #11998e;
+            box-shadow: 0 0 0 4px rgba(17, 153, 142, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            margin-top: 12px;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #11998e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(17, 153, 142, 0.4);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            background: #38ef7d;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #11998e;
+            cursor: pointer;
+            border: none;
+        }
+
+        .results {
+            margin-top: 35px;
+            padding: 30px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 18px;
+            color: white;
+        }
+
+        .results-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+            opacity: 0.95;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+
+        .result-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .result-item.highlight {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            margin: 10px -15px;
+            border-radius: 12px;
+            border-bottom: none;
+        }
+
+        .result-item.highlight .result-value {
+            font-size: 32px;
+            color: #ffd700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .info-box {
+            background: rgba(17, 153, 142, 0.1);
+            border-left: 4px solid #11998e;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+
+        .info-box .icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .info-box .text {
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .chart-area {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 150px;
+            gap: 15px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, #11998e, #38ef7d);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.6s ease;
+            box-shadow: 0 -4px 15px rgba(17, 153, 142, 0.3);
+        }
+
+        .bar:hover {
+            filter: brightness(1.1);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            font-weight: 700;
+            color: #11998e;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .affiliate-content h2 {
+                font-size: 24px;
+            }
+
+            .result-value {
+                font-size: 24px;
+            }
+
+            .result-item.highlight .result-value {
+                font-size: 28px;
+            }
+
+            .icon-graphic {
+                width: 130px;
+                height: 130px;
+            }
+
+            .chart-bars {
+                height: 120px;
+            }
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            opacity: 0.95;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .footer strong {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div style="text-align: center;">
+                <span class="gov-badge">Government Backed Savings</span>
+            </div>
+            <h1>🏦 PPF Calculator</h1>
+            <p class="subtitle">Public Provident Fund - Safe & Tax-Free Returns</p>
+            
+            <div class="input-group">
+                <label for="yearly">Yearly Investment Amount</label>
+                <div class="input-wrapper">
+                    <span class="input-prefix">₹</span>
+                    <input type="number" id="yearly" value="150000" min="500" max="150000" step="500">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="years">Investment Period: <span id="yearsValue">15</span> years</label>
+                <input type="range" id="years" min="1" max="15" value="15">
+            </div>
+
+            <div class="input-group">
+                <label for="rate">Expected Annual Interest Rate: <span id="rateValue">7.1</span>%</label>
+                <input type="range" id="rate" min="6.0" max="9.0" value="7.1" step="0.1">
+            </div>
+
+            <div class="info-box">
+                <span class="icon">💡</span>
+                <span class="text">
+                    <strong>Tax Benefits:</strong> Investments qualify for deduction under Section 80C (up to ₹1.5 lakh). Interest earned is completely tax-free! Current PPF rate: 7.1% p.a.
+                </span>
+            </div>
+
+            <div class="results">
+                <div class="results-title">📊 Your PPF Maturity Summary</div>
+                <div class="result-item">
+                    <span class="result-label">Total Investment</span>
+                    <span class="result-value" id="totalInvestment">₹22,50,000</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Interest Earned</span>
+                    <span class="result-value" id="totalInterest">₹18,17,736</span>
+                </div>
+                <div class="result-item highlight">
+                    <span class="result-label">💰 Maturity Amount</span>
+                    <span class="result-value" id="maturityAmount">₹40,67,736</span>
+                </div>
+            </div>
+
+            <div class="chart-area">
+                <div class="chart-bars">
+                    <div class="bar" id="investmentBar" style="height: 60%;">
+                        <div class="bar-value">₹22.5L</div>
+                        <div class="bar-label">Investment</div>
+                    </div>
+                    <div class="bar" id="interestBar" style="height: 48%;">
+                        <div class="bar-value">₹18.2L</div>
+                        <div class="bar-label">Interest</div>
+                    </div>
+                    <div class="bar" id="maturityBar" style="height: 100%;">
+                        <div class="bar-value">₹40.7L</div>
+                        <div class="bar-label">Maturity</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card affiliate-card">
+            <div class="affiliate-content">
+                <div class="icon-graphic">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="vaultGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#11998e;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#38ef7d;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ffed4e;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="lockGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#2d3436;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#636e72;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- Vault/Safe -->
+                        <rect x="60" y="70" width="80" height="90" rx="8" fill="url(#vaultGrad)"/>
+                        <rect x="65" y="75" width="70" height="80" rx="6" fill="#2d3436" opacity="0.3"/>
+                        
+                        <!-- Vault door circular lock -->
+                        <circle cx="100" cy="115" r="20" fill="url(#lockGrad)"/>
+                        <circle cx="100" cy="115" r="15" fill="#636e72"/>
+                        <circle cx="100" cy="115" r="8" fill="#2d3436"/>
+                        <rect x="98" y="115" width="4" height="15" fill="#2d3436" rx="2"/>
+                        
+                        <!-- Lock handle -->
+                        <path d="M 100 130 L 110 135" stroke="#2d3436" stroke-width="3" stroke-linecap="round"/>
+                        
+                        <!-- Government shield emblem -->
+                        <path d="M 100 50 L 85 58 L 85 72 Q 85 82 100 88 Q 115 82 115 72 L 115 58 Z" fill="url(#goldGrad)"/>
+                        <text x="100" y="75" font-family="Arial" font-size="16" font-weight="bold" fill="#2d3436" text-anchor="middle">🏛️</text>
+                        
+                        <!-- Money/coins growing -->
+                        <g id="coin-stack">
+                            <ellipse cx="140" cy="140" rx="12" ry="4" fill="url(#goldGrad)">
+                                <animate attributeName="ry" values="4;5;4" dur="2s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <ellipse cx="140" cy="135" rx="12" ry="4" fill="url(#goldGrad)">
+                                <animate attributeName="ry" values="4;5;4" dur="2s" begin="0.2s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <ellipse cx="140" cy="130" rx="12" ry="4" fill="url(#goldGrad)">
+                                <animate attributeName="ry" values="4;5;4" dur="2s" begin="0.4s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <text x="140" y="137" font-family="Arial" font-size="10" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                        </g>
+                        
+                        <g id="coin-stack2">
+                            <ellipse cx="60" cy="145" rx="10" ry="3" fill="url(#goldGrad)">
+                                <animate attributeName="ry" values="3;4;3" dur="2s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <ellipse cx="60" cy="141" rx="10" ry="3" fill="url(#goldGrad)">
+                                <animate attributeName="ry" values="3;4;3" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <text x="60" y="144" font-family="Arial" font-size="8" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                        </g>
+                        
+                        <!-- Growth arrow -->
+                        <path d="M 45 100 Q 35 80 30 60" stroke="#38ef7d" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="5,5">
+                            <animate attributeName="stroke-dashoffset" values="0;-10;0" dur="2s" repeatCount="indefinite"/>
+                        </path>
+                        <polygon points="30,60 25,68 35,65" fill="#38ef7d"/>
+                        
+                        <!-- Tax-free badge -->
+                        <circle cx="160" cy="60" r="18" fill="#ff6b6b" opacity="0.9"/>
+                        <text x="160" y="62" font-family="Arial" font-size="10" font-weight="bold" fill="white" text-anchor="middle">TAX</text>
+                        <text x="160" y="70" font-family="Arial" font-size="7" font-weight="bold" fill="white" text-anchor="middle">FREE</text>
+                        
+                        <!-- Sparkles for safety and growth -->
+                        <circle cx="170" cy="90" r="3" fill="#ffd700">
+                            <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="40" cy="120" r="2.5" fill="#ffd700">
+                            <animate attributeName="opacity" values="0.2;1;0.2" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="155" cy="130" r="2" fill="#ffd700">
+                            <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" begin="1s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                
+                <h2>🌟 India's Most Trusted Savings Scheme!</h2>
+                <p>PPF offers guaranteed returns with zero risk. Backed by the Government of India, it's the perfect long-term savings plan with tax-free maturity!</p>
+                
+                <div class="feature-badges">
+                    <span class="badge">🛡️ Government Backed</span>
+                    <span class="badge">💰 Tax Free Returns</span>
+                    <span class="badge">🔒 100% Safe</span>
+                    <span class="badge">📈 Compounding Power</span>
+                </div>
+                
+                <p><strong>🎁 Why Choose PPF?</strong></p>
+                <p style="font-size: 14px; margin: 15px 0; line-height: 1.8;">
+                    ✓ EEE Status - Tax benefit at all stages<br>
+                    ✓ Loan & Withdrawal facility<br>
+                    ✓ Flexible contributions (₹500 - ₹1.5L)<br>
+                    ✓ Can be extended after 15 years
+                </p>
+                
+                <button class="cta-button" onclick="alert('🏦 Open PPF Account Today!\n\n✅ Top Banks & Platforms:\n• SBI - Largest network\n• HDFC Bank - Easy online opening\n• ICICI Bank - Instant activation\n• Post Office - Traditional & trusted\n• Bank of Baroda - Low charges\n\n💡 Required Documents:\n• PAN Card\n• Aadhaar Card\n• Address Proof\n• Passport size photo\n\n🎯 Benefits:\n• Open account in 10 minutes\n• Online deposit facility\n• Nomination available\n• Automatic interest credit\n• Passbook/e-statement\n\n📞 Start with just ₹500!')">Open PPF Account →</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>🏛️ <strong>Trusted by Millions!</strong> PPF has helped crores of Indians build wealth safely for over 5 decades.</p>
+    </div>
+
+    <script>
+        const yearlyInput = document.getElementById('yearly');
+        const yearsInput = document.getElementById('years');
+        const rateInput = document.getElementById('rate');
+        const yearsValue = document.getElementById('yearsValue');
+        const rateValue = document.getElementById('rateValue');
+        const totalInvestmentEl = document.getElementById('totalInvestment');
+        const totalInterestEl = document.getElementById('totalInterest');
+        const maturityAmountEl = document.getElementById('maturityAmount');
+        
+        const investmentBar = document.getElementById('investmentBar');
+        const interestBar = document.getElementById('interestBar');
+        const maturityBar = document.getElementById('maturityBar');
+
+        function formatCurrency(value) {
+            if (value >= 10000000) {
+                return '₹' + (value / 10000000).toFixed(2) + ' Cr';
+            } else if (value >= 100000) {
+                return '₹' + (value / 100000).toFixed(1) + 'L';
+            }
+            return '₹' + value.toLocaleString('en-IN', {
+                maximumFractionDigits: 0
+            });
+        }
+
+        function formatCurrencyFull(value) {
+            return '₹' + value.toLocaleString('en-IN', {
+                maximumFractionDigits: 0
+            });
+        }
+
+        function calculatePPF() {
+            const yearlyInvestment = parseFloat(yearlyInput.value) || 0;
+            const years = parseInt(yearsInput.value);
+            const annualRate = parseFloat(rateInput.value);
+
+            yearsValue.textContent = years;
+            rateValue.textContent = annualRate.toFixed(1);
+
+            // PPF calculation with annual compounding
+            // Assuming investment is made at the beginning of each year
+            let maturityAmount = 0;
+            const rate = annualRate / 100;
+
+            for (let year = 1; year <= years; year++) {
+                // Add current year investment
+                maturityAmount += yearlyInvestment;
+                // Apply interest on the accumulated amount
+                maturityAmount = maturityAmount * (1 + rate);
+            }
+
+            const totalInvestment = yearlyInvestment * years;
+            const totalInterest = maturityAmount - totalInvestment;
+
+            // Update display
+            totalInvestmentEl.textContent = formatCurrencyFull(totalInvestment);
+            totalInterestEl.textContent = formatCurrencyFull(totalInterest);
+            maturityAmountEl.textContent = formatCurrencyFull(maturityAmount);
+
+            // Update chart
+            updateChart(totalInvestment, totalInterest, maturityAmount);
+        }
+
+        function updateChart(investment, interest, maturity) {
+            const maxValue = maturity;
+            
+            const investmentHeight = (investment / maxValue) * 100;
+            const interestHeight = (interest / maxValue) * 100;
+            const maturityHeight = 100;
+
+            investmentBar.style.height = investmentHeight + '%';
+            interestBar.style.height = interestHeight + '%';
+            maturityBar.style.height = maturityHeight + '%';
+
+            // Update bar values
+            document.querySelector('#investmentBar .bar-value').textContent = formatCurrency(investment);
+            document.querySelector('#interestBar .bar-value').textContent = formatCurrency(interest);
+            document.querySelector('#maturityBar .bar-value').textContent = formatCurrency(maturity);
+        }
+
+        yearlyInput.addEventListener('input', calculatePPF);
+        yearsInput.addEventListener('input', calculatePPF);
+        rateInput.addEventListener('input', calculatePPF);
+
+        // Initial calculation
+        calculatePPF();
+    </script>
+</body>
+</html>
