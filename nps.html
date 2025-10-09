@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPS Calculator - National Pension System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .top-section {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .affiliate-card {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 50%, #fab1a0 100%);
+            color: #2d3436;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .affiliate-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: rotate 8s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .icon-graphic {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        .icon-graphic svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+        }
+
+        .affiliate-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .affiliate-content h2 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #2d3436;
+        }
+
+        .affiliate-content p {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 18px;
+            color: #2d3436;
+        }
+
+        .benefits-list {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .benefit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .benefit-item::before {
+            content: '✓';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 12px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: white;
+            padding: 16px 45px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(15, 32, 39, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(15, 32, 39, 0.6);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 0;
+        }
+
+        .input-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px 40px 15px 35px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #2c5364;
+            box-shadow: 0 0 0 3px rgba(44, 83, 100, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            margin-top: 10px;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2c5364;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #0f2027;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2c5364;
+            cursor: pointer;
+            border: none;
+        }
+
+        .results-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .results-title {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(15, 32, 39, 0.4);
+        }
+
+        .result-card.highlight {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            grid-column: 1 / -1;
+        }
+
+        .result-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffd700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .result-card.highlight .result-value {
+            font-size: 36px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #74b9ff 0%, #a29bfe 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            color: white;
+            text-align: center;
+        }
+
+        .info-box strong {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .info-box span {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        @media (max-width: 1024px) {
+            .top-section {
+                grid-template-columns: 1fr;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-card.highlight {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card, .results-section {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .affiliate-content h2 {
+                font-size: 22px;
+            }
+
+            .result-value {
+                font-size: 26px;
+            }
+
+            .result-card.highlight .result-value {
+                font-size: 30px;
+            }
+
+            .icon-graphic {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.95;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .footer strong {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="top-section">
+            <div class="card">
+                <h1>🏦 NPS Calculator</h1>
+                <p class="subtitle">National Pension System - Plan Your Retirement</p>
+                
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="monthly">Monthly Investment</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">₹</span>
+                            <input type="number" id="monthly" value="5000" min="500" step="500">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="years">Investment Period: <span id="yearsValue">25</span> years</label>
+                        <input type="range" id="years" min="5" max="40" value="25">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="return">Expected Annual Return: <span id="returnValue">10</span>%</label>
+                        <input type="range" id="return" min="6" max="15" value="10" step="0.5">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="annuity">Annuity Allocation: <span id="annuityValue">40</span>%</label>
+                        <input type="range" id="annuity" min="40" max="100" value="40" step="5">
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label for="annuityReturn">Expected Annuity Return: <span id="annuityReturnValue">6</span>%</label>
+                        <input type="range" id="annuityReturn" min="4" max="10" value="6" step="0.5">
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Did You Know?</strong>
+                    <span>NPS offers tax benefits up to ₹2 lakh under Section 80C + 80CCD(1B). Start securing your retirement today!</span>
+                </div>
+            </div>
+
+            <div class="card affiliate-card">
+                <div class="affiliate-content">
+                    <div class="icon-graphic">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="umbrellaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#0f2027;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#2c5364;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#ffed4e;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Retirement umbrella (protection) -->
+                            <path d="M 100 60 Q 60 80 50 100 L 100 95 Z" fill="url(#umbrellaGrad)"/>
+                            <path d="M 100 60 Q 140 80 150 100 L 100 95 Z" fill="url(#umbrellaGrad)"/>
+                            <circle cx="100" cy="60" r="5" fill="url(#umbrellaGrad)"/>
+                            <line x1="100" y1="95" x2="100" y2="130" stroke="url(#umbrellaGrad)" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M 100 130 Q 105 135 95 135" stroke="url(#umbrellaGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                            
+                            <!-- Person under umbrella -->
+                            <circle cx="100" cy="145" r="12" fill="#fab1a0"/>
+                            <path d="M 100 157 L 100 180" stroke="#fab1a0" stroke-width="6" stroke-linecap="round"/>
+                            <path d="M 100 165 L 85 175" stroke="#fab1a0" stroke-width="5" stroke-linecap="round"/>
+                            <path d="M 100 165 L 115 175" stroke="#fab1a0" stroke-width="5" stroke-linecap="round"/>
+                            <path d="M 100 180 L 90 195" stroke="#fab1a0" stroke-width="5" stroke-linecap="round"/>
+                            <path d="M 100 180 L 110 195" stroke="#fab1a0" stroke-width="5" stroke-linecap="round"/>
+                            
+                            <!-- Coins falling (representing pension) -->
+                            <g id="coin1">
+                                <ellipse cx="130" cy="50" rx="8" ry="3" fill="url(#goldGrad)">
+                                    <animate attributeName="cy" values="50;110;50" dur="3s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="1;0.5;1" dur="3s" repeatCount="indefinite"/>
+                                </ellipse>
+                                <text x="130" y="52" font-family="Arial" font-size="8" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                            </g>
+                            
+                            <g id="coin2">
+                                <ellipse cx="70" cy="40" rx="8" ry="3" fill="url(#goldGrad)">
+                                    <animate attributeName="cy" values="40;100;40" dur="3.5s" begin="1s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="1;0.5;1" dur="3.5s" begin="1s" repeatCount="indefinite"/>
+                                </ellipse>
+                                <text x="70" y="42" font-family="Arial" font-size="8" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                            </g>
+                            
+                            <g id="coin3">
+                                <ellipse cx="160" cy="35" rx="8" ry="3" fill="url(#goldGrad)">
+                                    <animate attributeName="cy" values="35;95;35" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="1;0.5;1" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+                                </ellipse>
+                                <text x="160" y="37" font-family="Arial" font-size="8" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                            </g>
+                            
+                            <!-- Shield symbol -->
+                            <path d="M 30 120 L 30 140 Q 30 155 40 160 L 40 120 Z" fill="#74b9ff" opacity="0.7"/>
+                            <path d="M 40 120 L 40 160 Q 40 165 45 167 Q 50 165 50 160 L 50 120 Z" fill="#a29bfe" opacity="0.7"/>
+                        </svg>
+                    </div>
+                    
+                    <h2>🌟 Secure Your Golden Years!</h2>
+                    <p>NPS is the smartest retirement solution - Government backed, tax efficient, and market-linked returns. Build a worry-free retirement corpus!</p>
+                    
+                    <div class="benefits-list">
+                        <div class="benefit-item">Tax savings up to ₹2 lakh</div>
+                        <div class="benefit-item">Lowest charges (0.01%)</div>
+                        <div class="benefit-item">Government co-contribution</div>
+                        <div class="benefit-item">Portable across jobs</div>
+                        <div class="benefit-item">Flexible investment options</div>
+                    </div>
+                    
+                    <p><strong>🎁 Limited Offer:</strong> Open NPS account today and get free financial planning consultation worth ₹5,000!</p>
+                    <button class="cta-button" onclick="alert('🏆 Top NPS & Retirement Platforms:\n\n✅ NPS Trust (Official) - Direct enrollment\n✅ HDFC Pension - Expert guidance\n✅ ICICI Pru Pension - Low charges\n✅ SBI Pension - Trusted service\n✅ ET Money - Digital NPS\n\n💰 Benefits:\n• Instant account opening\n• Online portfolio tracking\n• Auto-debit facility\n• Tax certificate download\n• Switch between funds\n\n🎯 Start with just ₹500/month!')">Open NPS Account →</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <h3 class="results-title">📊 Your Retirement Plan Summary</h3>
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-label">Total Investment</div>
+                    <div class="result-value" id="totalInvestment">₹15,00,000</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">Pension Corpus at Retirement</div>
+                    <div class="result-value" id="totalCorpus">₹66,22,880</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">Lump Sum Withdrawal (60%)</div>
+                    <div class="result-value" id="lumpSum">₹39,73,728</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">Amount for Annuity (40%)</div>
+                    <div class="result-value" id="annuityAmount">₹26,49,152</div>
+                </div>
+                <div class="result-card highlight">
+                    <div class="result-label">💰 Monthly Pension After Retirement</div>
+                    <div class="result-value" id="monthlyPension">₹13,246</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>🎯 <strong>Start Early, Retire Rich!</strong> NPS is your pathway to financial freedom in retirement.</p>
+    </div>
+
+    <script>
+        const monthlyInput = document.getElementById('monthly');
+        const yearsInput = document.getElementById('years');
+        const returnInput = document.getElementById('return');
+        const annuityInput = document.getElementById('annuity');
+        const annuityReturnInput = document.getElementById('annuityReturn');
+        
+        const yearsValue = document.getElementById('yearsValue');
+        const returnValue = document.getElementById('returnValue');
+        const annuityValue = document.getElementById('annuityValue');
+        const annuityReturnValue = document.getElementById('annuityReturnValue');
+        
+        const totalInvestmentEl = document.getElementById('totalInvestment');
+        const totalCorpusEl = document.getElementById('totalCorpus');
+        const lumpSumEl = document.getElementById('lumpSum');
+        const annuityAmountEl = document.getElementById('annuityAmount');
+        const monthlyPensionEl = document.getElementById('monthlyPension');
+
+        function formatCurrency(value) {
+            return '₹' + value.toLocaleString('en-IN', {
+                maximumFractionDigits: 0
+            });
+        }
+
+        function calculateNPS() {
+            const monthlyInvestment = parseFloat(monthlyInput.value) || 0;
+            const years = parseInt(yearsInput.value);
+            const annualReturn = parseFloat(returnInput.value);
+            const annuityPercentage = parseFloat(annuityInput.value);
+            const annuityReturn = parseFloat(annuityReturnInput.value);
+
+            // Update display values
+            yearsValue.textContent = years;
+            returnValue.textContent = annualReturn;
+            annuityValue.textContent = annuityPercentage;
+            annuityReturnValue.textContent = annuityReturn;
+
+            const monthlyRate = annualReturn / 12 / 100;
+            const totalMonths = years * 12;
+
+            // Calculate future value using compound interest formula for SIP
+            // FV = P × [(1 + r)^n - 1] / r × (1 + r)
+            const futureValue = monthlyInvestment * 
+                (Math.pow(1 + monthlyRate, totalMonths) - 1) / 
+                monthlyRate * 
+                (1 + monthlyRate);
+
+            const totalInvestment = monthlyInvestment * totalMonths;
+
+            // NPS rules: minimum 40% must be used for annuity
+            const annuityPercentageDecimal = annuityPercentage / 100;
+            const lumpSumPercentage = 1 - annuityPercentageDecimal;
+
+            const lumpSumAmount = futureValue * lumpSumPercentage;
+            const annuityCorpus = futureValue * annuityPercentageDecimal;
+
+            // Calculate monthly pension from annuity
+            // Monthly Pension = (Annuity Corpus × Annual Return) / 12
+            const monthlyPension = (annuityCorpus * (annuityReturn / 100)) / 12;
+
+            // Update display
+            totalInvestmentEl.textContent = formatCurrency(totalInvestment);
+            totalCorpusEl.textContent = formatCurrency(futureValue);
+            lumpSumEl.textContent = formatCurrency(lumpSumAmount);
+            annuityAmountEl.textContent = formatCurrency(annuityCorpus);
+            monthlyPensionEl.textContent = formatCurrency(monthlyPension);
+        }
+
+        monthlyInput.addEventListener('input', calculateNPS);
+        yearsInput.addEventListener('input', calculateNPS);
+        returnInput.addEventListener('input', calculateNPS);
+        annuityInput.addEventListener('input', calculateNPS);
+        annuityReturnInput.addEventListener('input', calculateNPS);
+
+        // Initial calculation
+        calculateNPS();
+    </script>
+</body>
+</html>
