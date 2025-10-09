@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWP Calculator - Systematic Withdrawal Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .affiliate-card {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .affiliate-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .icon-graphic {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .icon-graphic svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
+        }
+
+        .affiliate-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .affiliate-content h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #2d3436;
+        }
+
+        .affiliate-content p {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: #2d3436;
+            opacity: 0.9;
+        }
+
+        .benefit-list {
+            text-align: left;
+            margin: 20px auto;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .benefit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .benefit-item::before {
+            content: '✓';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 45px;
+            border: none;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            margin-top: 10px;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4facfe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #00f2fe;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4facfe;
+            cursor: pointer;
+            border: none;
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+
+        .result-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .final-balance {
+            font-size: 28px !important;
+            color: #ffd700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .affiliate-content h2 {
+                font-size: 24px;
+            }
+
+            .result-value {
+                font-size: 20px;
+            }
+
+            .final-balance {
+                font-size: 24px !important;
+            }
+
+            .icon-graphic {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.95;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>💸 SWP Calculator</h1>
+            <p class="subtitle">Systematic Withdrawal Plan</p>
+            
+            <div class="input-group">
+                <label for="investment">Initial Investment Amount (₹)</label>
+                <input type="number" id="investment" value="1000000" min="10000" step="10000">
+            </div>
+
+            <div class="input-group">
+                <label for="withdrawal">Monthly Withdrawal Amount (₹)</label>
+                <input type="number" id="withdrawal" value="10000" min="1000" step="1000">
+            </div>
+
+            <div class="input-group">
+                <label for="rate">Expected Annual Return (%): <span id="rateValue">12</span></label>
+                <input type="range" id="rate" min="1" max="25" value="12" step="0.5">
+            </div>
+
+            <div class="input-group">
+                <label for="years">Investment Duration (Years): <span id="yearsValue">10</span></label>
+                <input type="range" id="years" min="1" max="30" value="10">
+            </div>
+
+            <div class="results">
+                <div class="result-item">
+                    <span class="result-label">Total Withdrawals</span>
+                    <span class="result-value" id="totalWithdrawals">₹12,00,000</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Growth Earned</span>
+                    <span class="result-value" id="growthEarned">₹6,44,567</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Final Balance</span>
+                    <span class="result-value final-balance" id="finalBalance">₹16,44,567</span>
+                </div>
+            </div>
+
+            <div class="warning" id="warning" style="display: none;">
+                ⚠️ Warning: Your withdrawals exceed growth! Principal depleting.
+            </div>
+        </div>
+
+        <div class="card affiliate-card">
+            <div class="affiliate-content">
+                <div class="icon-graphic">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="walletGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="moneyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- Wallet -->
+                        <rect x="40" y="80" width="120" height="80" rx="10" fill="url(#walletGrad)"/>
+                        <rect x="40" y="70" width="120" height="20" rx="10" fill="url(#walletGrad)" opacity="0.8"/>
+                        <circle cx="140" cy="120" r="8" fill="white" opacity="0.3"/>
+                        
+                        <!-- Money bills flowing out -->
+                        <g id="bill1">
+                            <rect x="100" y="35" width="50" height="30" rx="3" fill="url(#moneyGrad)">
+                                <animateTransform attributeName="transform" type="translate" values="0,0; 20,-20; 40,-40" dur="2s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="1;1;0" dur="2s" repeatCount="indefinite"/>
+                            </rect>
+                            <circle cx="125" cy="50" r="6" fill="white" opacity="0.4">
+                                <animateTransform attributeName="transform" type="translate" values="0,0; 20,-20; 40,-40" dur="2s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="0.4;0.4;0" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                        </g>
+                        
+                        <g id="bill2">
+                            <rect x="80" y="40" width="50" height="30" rx="3" fill="url(#moneyGrad)">
+                                <animateTransform attributeName="transform" type="translate" values="0,0; -15,-25; -30,-50" dur="2.5s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="1;1;0" dur="2.5s" repeatCount="indefinite"/>
+                            </rect>
+                            <circle cx="105" cy="55" r="6" fill="white" opacity="0.4">
+                                <animateTransform attributeName="transform" type="translate" values="0,0; -15,-25; -30,-50" dur="2.5s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="0.4;0.4;0" dur="2.5s" repeatCount="indefinite"/>
+                            </circle>
+                        </g>
+                        
+                        <!-- Rupee symbol -->
+                        <text x="100" y="125" font-family="Arial" font-size="35" font-weight="bold" fill="white" text-anchor="middle">₹</text>
+                        
+                        <!-- Sparkles -->
+                        <circle cx="170" cy="60" r="3" fill="white">
+                            <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="30" cy="100" r="2.5" fill="white">
+                            <animate attributeName="opacity" values="0.2;1;0.2" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="180" cy="130" r="2" fill="white">
+                            <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                
+                <h2>🌟 Generate Regular Income from Your Investments!</h2>
+                <p>Create a steady monthly income stream while your investments continue to grow. Perfect for retirees, passive income seekers, and smart wealth management.</p>
+                
+                <div class="benefit-list">
+                    <div class="benefit-item">Tax-efficient withdrawals</div>
+                    <div class="benefit-item">Continue earning returns</div>
+                    <div class="benefit-item">Flexible withdrawal amounts</div>
+                    <div class="benefit-item">No lock-in period</div>
+                    <div class="benefit-item">Auto-debit to bank account</div>
+                </div>
+                
+                <p><strong>🎁 Limited Time:</strong> Get free portfolio review and personalized SWP strategy from certified financial planners!</p>
+                <button class="cta-button" onclick="alert('Start your SWP journey with:\n\n🏆 Top Platforms:\n• Groww - Zero commission\n• Zerodha Coin - Direct plans\n• ET Money - Expert guidance\n• Kuvera - Smart automation\n• Paytm Money - Easy interface\n\n💰 Start with as low as ₹5,000/month!')">Start SWP Now →</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>💡 Smart withdrawals, sustained wealth. Let your money work while you enjoy!</p>
+    </div>
+
+    <script>
+        const investmentInput = document.getElementById('investment');
+        const withdrawalInput = document.getElementById('withdrawal');
+        const yearsInput = document.getElementById('years');
+        const rateInput = document.getElementById('rate');
+        const yearsValue = document.getElementById('yearsValue');
+        const rateValue = document.getElementById('rateValue');
+        const totalWithdrawalsEl = document.getElementById('totalWithdrawals');
+        const growthEarnedEl = document.getElementById('growthEarned');
+        const finalBalanceEl = document.getElementById('finalBalance');
+        const warningEl = document.getElementById('warning');
+
+        function formatCurrency(value) {
+            return '₹' + value.toLocaleString('en-IN', {
+                maximumFractionDigits: 0
+            });
+        }
+
+        function calculateSWP() {
+            const principal = parseFloat(investmentInput.value) || 0;
+            const monthlyWithdrawal = parseFloat(withdrawalInput.value) || 0;
+            const years = parseInt(yearsInput.value);
+            const annualRate = parseFloat(rateInput.value);
+
+            yearsValue.textContent = years;
+            rateValue.textContent = annualRate;
+
+            const monthlyRate = annualRate / 12 / 100;
+            const totalMonths = years * 12;
+            
+            let balance = principal;
+            let totalWithdrawn = 0;
+            let monthsProcessed = 0;
+
+            // Simulate month by month
+            for (let month = 1; month <= totalMonths; month++) {
+                // Add monthly returns
+                balance = balance * (1 + monthlyRate);
+                
+                // Withdraw if balance is sufficient
+                if (balance >= monthlyWithdrawal) {
+                    balance -= monthlyWithdrawal;
+                    totalWithdrawn += monthlyWithdrawal;
+                    monthsProcessed = month;
+                } else {
+                    // If balance insufficient, withdraw remaining and stop
+                    totalWithdrawn += balance;
+                    balance = 0;
+                    monthsProcessed = month;
+                    break;
+                }
+            }
+
+            const finalBalance = Math.max(0, balance);
+            const totalGrowth = (totalWithdrawn + finalBalance) - principal;
+
+            // Show warning if principal is depleting
+            if (finalBalance < principal * 0.5 || balance === 0) {
+                warningEl.style.display = 'block';
+            } else {
+                warningEl.style.display = 'none';
+            }
+
+            // Update display
+            totalWithdrawalsEl.textContent = formatCurrency(totalWithdrawn);
+            growthEarnedEl.textContent = formatCurrency(totalGrowth);
+            finalBalanceEl.textContent = formatCurrency(finalBalance);
+
+            // Update warning if funds depleted early
+            if (monthsProcessed < totalMonths) {
+                warningEl.textContent = `⚠️ Funds depleted after ${Math.floor(monthsProcessed/12)} years ${monthsProcessed%12} months!`;
+                warningEl.style.display = 'block';
+            }
+        }
+
+        investmentInput.addEventListener('input', calculateSWP);
+        withdrawalInput.addEventListener('input', calculateSWP);
+        yearsInput.addEventListener('input', calculateSWP);
+        rateInput.addEventListener('input', calculateSWP);
+
+        // Initial calculation
+        calculateSWP();
+    </script>
+</body>
+</html>
