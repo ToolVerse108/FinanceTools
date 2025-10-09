@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutual Fund Return Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .affiliate-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #2d3436;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .affiliate-card::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
+            animation: pulse-bg 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-bg {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .icon-graphic {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .icon-graphic svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.25));
+        }
+
+        .affiliate-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .affiliate-content h2 {
+            font-size: 29px;
+            margin-bottom: 18px;
+            font-weight: 700;
+            color: #2d3436;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+        }
+
+        .affiliate-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 25px 0;
+            max-width: 450px;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .feature-box .icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .feature-box .text {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d3436;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 17px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 35px;
+            font-style: italic;
+        }
+
+        .input-group {
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 16px 16px 16px 35px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            margin-top: 12px;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            background: #764ba2;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .results {
+            margin-top: 35px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .result-label {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .result-card.highlight {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 8px 30px rgba(245, 87, 108, 0.3);
+        }
+
+        .result-card.highlight .result-value {
+            font-size: 32px;
+            color: #ffd700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .info-badge .icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .affiliate-content h2 {
+                font-size: 24px;
+            }
+
+            .result-value {
+                font-size: 24px;
+            }
+
+            .result-card.highlight .result-value {
+                font-size: 28px;
+            }
+
+            .icon-graphic {
+                width: 130px;
+                height: 130px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            opacity: 0.95;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .footer strong {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>📈 Mutual Fund Return Calculator</h1>
+            <p class="subtitle">Calculate your investment returns accurately</p>
+            
+            <div class="input-group">
+                <label for="initial">Initial Investment Amount</label>
+                <div class="input-wrapper">
+                    <span class="input-prefix">₹</span>
+                    <input type="number" id="initial" value="100000" min="1000" step="1000">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="final">Final Value / Current Value</label>
+                <div class="input-wrapper">
+                    <span class="input-prefix">₹</span>
+                    <input type="number" id="final" value="200000" min="1000" step="1000">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="years">Investment Duration: <span id="yearsValue">5</span> years</label>
+                <input type="range" id="years" min="1" max="30" value="5">
+            </div>
+
+            <div class="info-badge">
+                <span class="icon">💡</span>
+                <span>CAGR shows average annual growth rate</span>
+            </div>
+
+            <div class="results">
+                <div class="result-card highlight">
+                    <span class="result-label">CAGR (Annual Growth Rate)</span>
+                    <span class="result-value" id="cagr">14.87%</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-label">Total Profit Earned</span>
+                    <span class="result-value" id="profit">₹1,00,000</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-label">Absolute Return</span>
+                    <span class="result-value" id="absReturn">100.00%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card affiliate-card">
+            <div class="affiliate-content">
+                <div class="icon-graphic">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="chartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ffed4e;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- Graph bars with growth -->
+                        <rect x="30" y="140" width="25" height="40" rx="4" fill="url(#chartGrad)" opacity="0.6">
+                            <animate attributeName="height" values="40;45;40" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="y" values="140;135;140" dur="2s" repeatCount="indefinite"/>
+                        </rect>
+                        <rect x="65" y="120" width="25" height="60" rx="4" fill="url(#chartGrad)" opacity="0.7">
+                            <animate attributeName="height" values="60;65;60" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+                            <animate attributeName="y" values="120;115;120" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+                        </rect>
+                        <rect x="100" y="95" width="25" height="85" rx="4" fill="url(#chartGrad)" opacity="0.8">
+                            <animate attributeName="height" values="85;90;85" dur="2s" begin="0.6s" repeatCount="indefinite"/>
+                            <animate attributeName="y" values="95;90;95" dur="2s" begin="0.6s" repeatCount="indefinite"/>
+                        </rect>
+                        <rect x="135" y="65" width="25" height="115" rx="4" fill="url(#chartGrad)">
+                            <animate attributeName="height" values="115;120;115" dur="2s" begin="0.9s" repeatCount="indefinite"/>
+                            <animate attributeName="y" values="65;60;65" dur="2s" begin="0.9s" repeatCount="indefinite"/>
+                        </rect>
+                        
+                        <!-- Trend line -->
+                        <path d="M 30 150 Q 80 100 135 55" stroke="#f5576c" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="5,5">
+                            <animate attributeName="stroke-dashoffset" values="0;-10;0" dur="2s" repeatCount="indefinite"/>
+                        </path>
+                        
+                        <!-- Upward arrow -->
+                        <path d="M 145 50 L 165 35" stroke="#f5576c" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="165,35 160,42 170,40" fill="#f5576c"/>
+                        
+                        <!-- Coins with animation -->
+                        <g id="coin1">
+                            <ellipse cx="155" cy="25" rx="15" ry="5" fill="url(#coinGrad)">
+                                <animate attributeName="cy" values="25;20;25" dur="2s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <ellipse cx="155" cy="23" rx="15" ry="5" fill="url(#coinGrad)" opacity="0.8">
+                                <animate attributeName="cy" values="23;18;23" dur="2s" repeatCount="indefinite"/>
+                            </ellipse>
+                            <text x="155" y="25" font-family="Arial" font-size="12" font-weight="bold" fill="#333" text-anchor="middle">₹</text>
+                        </g>
+                        
+                        <!-- Sparkles around growth -->
+                        <circle cx="170" cy="40" r="3" fill="#ffd700">
+                            <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/>
+                            <animate attributeName="r" values="2;4;2" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="150" cy="15" r="2.5" fill="#ffd700">
+                            <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                            <animate attributeName="r" values="1.5;3.5;1.5" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="180" cy="55" r="2" fill="#ffd700">
+                            <animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="1s" repeatCount="indefinite"/>
+                            <animate attributeName="r" values="1;3;1" dur="1.8s" begin="1s" repeatCount="indefinite"/>
+                        </circle>
+                        
+                        <!-- Percentage symbol -->
+                        <text x="175" y="75" font-family="Arial" font-size="24" font-weight="bold" fill="#667eea" opacity="0.7">%</text>
+                    </svg>
+                </div>
+                
+                <h2>🚀 Unlock Superior Returns with Smart Investing!</h2>
+                <p>Track your mutual fund performance and discover funds that consistently outperform. Join millions of smart investors growing their wealth!</p>
+                
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <div class="icon">📊</div>
+                        <div class="text">Direct Plans</div>
+                    </div>
+                    <div class="feature-box">
+                        <div class="icon">💰</div>
+                        <div class="text">Zero Commission</div>
+                    </div>
+                    <div class="feature-box">
+                        <div class="icon">🎯</div>
+                        <div class="text">Expert Picks</div>
+                    </div>
+                    <div class="feature-box">
+                        <div class="icon">🔐</div>
+                        <div class="text">100% Safe</div>
+                    </div>
+                </div>
+                
+                <p><strong>🎁 Special Offer:</strong> Start investing with <strong>₹100</strong> and get personalized fund recommendations from certified advisors!</p>
+                <button class="cta-button" onclick="alert('🌟 Top Investment Platforms:\n\n✅ Groww - Most user-friendly\n✅ Zerodha Coin - Direct MF plans\n✅ ET Money - AI recommendations\n✅ Paytm Money - Quick KYC\n✅ Kuvera - Advanced analytics\n\n💡 Features:\n• Zero account opening fees\n• Instant withdrawals\n• Tax-saving funds (ELSS)\n• SIP starting at ₹100\n\n🎯 Start your wealth journey today!')">Start Investing Now →</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>💎 <strong>Pro Tip:</strong> Consistent returns over 12-15% CAGR indicate excellent fund performance!</p>
+    </div>
+
+    <script>
+        const initialInput = document.getElementById('initial');
+        const finalInput = document.getElementById('final');
+        const yearsInput = document.getElementById('years');
+        const yearsValue = document.getElementById('yearsValue');
+        const cagrEl = document.getElementById('cagr');
+        const profitEl = document.getElementById('profit');
+        const absReturnEl = document.getElementById('absReturn');
+
+        function formatCurrency(value) {
+            return '₹' + value.toLocaleString('en-IN', {
+                maximumFractionDigits: 0
+            });
+        }
+
+        function formatPercentage(value) {
+            return value.toFixed(2) + '%';
+        }
+
+        function calculateReturns() {
+            const initialInvestment = parseFloat(initialInput.value) || 0;
+            const finalValue = parseFloat(finalInput.value) || 0;
+            const years = parseInt(yearsInput.value);
+
+            yearsValue.textContent = years;
+
+            // Ensure final value is greater than initial
+            if (finalValue <= initialInvestment) {
+                cagrEl.textContent = '0.00%';
+                profitEl.textContent = formatCurrency(0);
+                absReturnEl.textContent = '0.00%';
+                return;
+            }
+
+            // Calculate CAGR: [(Final Value / Initial Value)^(1/years)] - 1
+            const cagr = (Math.pow(finalValue / initialInvestment, 1 / years) - 1) * 100;
+
+            // Calculate absolute return
+            const totalProfit = finalValue - initialInvestment;
+            const absoluteReturn = ((finalValue - initialInvestment) / initialInvestment) * 100;
+
+            // Update display
+            cagrEl.textContent = formatPercentage(cagr);
+            profitEl.textContent = formatCurrency(totalProfit);
+            absReturnEl.textContent = formatPercentage(absoluteReturn);
+        }
+
+        initialInput.addEventListener('input', calculateReturns);
+        finalInput.addEventListener('input', calculateReturns);
+        yearsInput.addEventListener('input', calculateReturns);
+
+        // Initial calculation
+        calculateReturns();
+    </script>
+</body>
+</html>
