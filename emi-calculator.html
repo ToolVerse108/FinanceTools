@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMI Calculator - Plan Your Loan</title>
+    <title>EMI Calculator - Loan Payment Calculator</title>
     <style>
         * {
             margin: 0;
@@ -16,67 +16,231 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        .main-container {
+            max-width: 1400px;
+            width: 100%;
         }
 
-        .calculator-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
+        .top-section {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 30px;
             margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .affiliate-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #2d3436;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .affiliate-card::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            animation: float-gradient 8s ease-in-out infinite;
+        }
+
+        @keyframes float-gradient {
+            0%, 100% { 
+                transform: translate(-100px, -100px); 
+                opacity: 0.5;
+            }
+            50% { 
+                transform: translate(100px, 100px); 
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.05); 
+            }
+        }
+
+        .icon-graphic {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .icon-graphic svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.25));
+        }
+
+        .affiliate-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .affiliate-content h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            color: #2d3436;
+        }
+
+        .affiliate-content p {
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 18px;
+            color: #2d3436;
+        }
+
+        .bank-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 22px 0;
+        }
+
+        .bank-box {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .bank-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 17px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
         }
 
         h1 {
             color: #333;
-            margin-bottom: 10px;
             font-size: 32px;
+            margin-bottom: 8px;
             text-align: center;
         }
 
         .subtitle {
-            color: #666;
             text-align: center;
-            margin-bottom: 35px;
-            font-size: 15px;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-style: italic;
         }
 
-        .main-grid {
+        .input-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            grid-template-columns: 1fr;
+            gap: 25px;
             margin-bottom: 30px;
         }
 
-        .input-section {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
         .input-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 0;
         }
 
         label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: #555;
-            font-weight: 600;
-            margin-bottom: 12px;
-            font-size: 14px;
         }
 
-        .value-display {
+        .label-value {
             color: #667eea;
             font-size: 16px;
-            font-weight: 700;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px 50px 15px 35px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         input[type="range"] {
@@ -85,6 +249,7 @@
             border-radius: 5px;
             background: #e0e0e0;
             outline: none;
+            margin-top: 10px;
             -webkit-appearance: none;
         }
 
@@ -94,65 +259,118 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #667eea;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #764ba2;
         }
 
         input[type="range"]::-moz-range-thumb {
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #667eea;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             border: none;
         }
 
-        .chart-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        .results-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            margin-top: 30px;
         }
 
-        .donut-chart {
+        .results-title {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 28px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .result-card.highlight {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            grid-column: 1 / -1;
+            padding: 32px;
+        }
+
+        .result-label {
+            font-size: 14px;
+            opacity: 0.95;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffd700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .result-card.highlight .result-value {
+            font-size: 38px;
+        }
+
+        /* Chart Styles */
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .chart-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .pie-chart {
             position: relative;
-            width: 250px;
-            height: 250px;
-            margin-bottom: 20px;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 30px;
         }
 
-        .donut-chart svg {
+        .pie-chart svg {
             transform: rotate(-90deg);
         }
 
-        .chart-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .chart-label {
-            font-size: 12px;
-            color: #666;
-            font-weight: 600;
-        }
-
-        .chart-value {
-            font-size: 24px;
-            color: #333;
-            font-weight: 700;
-            margin-top: 5px;
-        }
-
-        .legend {
+        .chart-legend {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 100%;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
         }
 
         .legend-item {
@@ -167,5 +385,389 @@
             border-radius: 4px;
         }
 
-        .legend-text {
-            flex: 1;
+        .legend-label {
+            font-size: 14px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .legend-value {
+            font-size: 16px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .info-box {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+
+        .info-box .icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .info-box .text {
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 1024px) {
+            .top-section {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-card.highlight {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card, .results-section {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .affiliate-content h2 {
+                font-size: 24px;
+            }
+
+            .result-value {
+                font-size: 26px;
+            }
+
+            .result-card.highlight .result-value {
+                font-size: 30px;
+            }
+
+            .icon-graphic {
+                width: 130px;
+                height: 130px;
+            }
+
+            .pie-chart {
+                width: 220px;
+                height: 220px;
+            }
+
+            .bank-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.95;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .footer strong {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="top-section">
+            <div class="card">
+                <h1>💳 EMI Calculator</h1>
+                <p class="subtitle">Calculate Your Loan Monthly Installments</p>
+                
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>
+                            <span>Loan Amount</span>
+                            <span class="label-value" id="loanAmountValue">₹10,00,000</span>
+                        </label>
+                        <input type="range" id="loanAmount" min="10000" max="10000000" value="1000000" step="10000">
+                    </div>
+
+                    <div class="input-group">
+                        <label>
+                            <span>Interest Rate (Annual)</span>
+                            <span class="label-value" id="interestRateValue">8.5%</span>
+                        </label>
+                        <input type="range" id="interestRate" min="1" max="30" value="8.5" step="0.1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>
+                            <span>Loan Tenure</span>
+                            <span class="label-value" id="tenureValue">10 Years</span>
+                        </label>
+                        <input type="range" id="tenure" min="1" max="30" value="10">
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <span class="icon">💡</span>
+                    <span class="text">
+                        <strong>EMI Formula:</strong> EMI = P × r × (1 + r)^n / ((1 + r)^n - 1), where P = Principal, r = Monthly interest rate, n = Number of months
+                    </span>
+                </div>
+            </div>
+
+            <div class="card affiliate-card">
+                <div class="affiliate-content">
+                    <div class="icon-graphic">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#ffed4e;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Credit Card -->
+                            <rect x="40" y="70" width="120" height="75" rx="8" fill="url(#cardGrad)"/>
+                            <rect x="40" y="85" width="120" height="12" fill="#2d3436" opacity="0.3"/>
+                            
+                            <!-- Card chip -->
+                            <rect x="55" y="105" width="25" height="20" rx="3" fill="#ffd700" opacity="0.8"/>
+                            <line x1="60" y1="105" x2="60" y2="125" stroke="#2d3436" stroke-width="1"/>
+                            <line x1="75" y1="105" x2="75" y2="125" stroke="#2d3436" stroke-width="1"/>
+                            
+                            <!-- Card number dots -->
+                            <circle cx="95" cy="125" r="2" fill="white"/>
+                            <circle cx="102" cy="125" r="2" fill="white"/>
+                            <circle cx="109" cy="125" r="2" fill="white"/>
+                            <circle cx="116" cy="125" r="2" fill="white"/>
+                            
+                            <!-- Money flow animation -->
+                            <g id="money1">
+                                <circle cx="100" cy="50" r="10" fill="url(#coinGrad)">
+                                    <animate attributeName="cy" values="50;70;50" dur="2s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+                                </circle>
+                                <text x="100" y="54" font-family="Arial" font-size="10" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                            </g>
+                            
+                            <g id="money2">
+                                <circle cx="120" cy="45" r="8" fill="url(#coinGrad)">
+                                    <animate attributeName="cy" values="45;70;45" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="1;0.5;1" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+                                </circle>
+                                <text x="120" y="48" font-family="Arial" font-size="8" font-weight="bold" fill="#2d3436" text-anchor="middle">₹</text>
+                            </g>
+                            
+                            <!-- Calendar/Schedule icon -->
+                            <rect x="135" y="100" width="30" height="35" rx="3" fill="white" opacity="0.9"/>
+                            <rect x="135" y="100" width="30" height="8" rx="3" fill="#764ba2"/>
+                            <line x1="142" y1="112" x2="158" y2="112" stroke="#667eea" stroke-width="2"/>
+                            <line x1="142" y1="118" x2="158" y2="118" stroke="#667eea" stroke-width="2"/>
+                            <line x1="142" y1="124" x2="158" y2="124" stroke="#667eea" stroke-width="2"/>
+                            
+                            <!-- Bank building -->
+                            <rect x="20" y="150" width="40" height="35" rx="3" fill="#a8edea"/>
+                            <rect x="25" y="158" width="8" height="8" fill="white"/>
+                            <rect x="37" y="158" width="8" height="8" fill="white"/>
+                            <rect x="25" y="170" width="8" height="8" fill="white"/>
+                            <rect x="37" y="170" width="8" height="8" fill="white"/>
+                            <rect x="30" y="180" width="10" height="5" fill="#2d3436"/>
+                            
+                            <!-- Sparkles -->
+                            <circle cx="170" cy="60" r="3" fill="#ffd700">
+                                <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="30" cy="90" r="2.5" fill="#ffd700">
+                                <animate attributeName="opacity" values="0.2;1;0.2" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="180" cy="130" r="2" fill="#ffd700">
+                                <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" begin="1s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                    </div>
+                    
+                    <h2>🎯 Get the Best Loan Deals!</h2>
+                    <p>Compare interest rates from top banks and get instant loan approval. Low EMI, flexible tenure, and zero processing fees available!</p>
+                    
+                    <div class="bank-grid">
+                        <div class="bank-box">🏦 HDFC Bank<br><small>7.5% onwards</small></div>
+                        <div class="bank-box">🏦 ICICI Bank<br><small>7.8% onwards</small></div>
+                        <div class="bank-box">🏦 SBI<br><small>8.0% onwards</small></div>
+                        <div class="bank-box">🏦 Axis Bank<br><small>8.2% onwards</small></div>
+                    </div>
+                    
+                    <p><strong>✨ Special Features:</strong></p>
+                    <p style="font-size: 14px; margin: 15px 0; line-height: 1.9;">
+                        ✓ Instant approval within 24 hours<br>
+                        ✓ Minimal documentation required<br>
+                        ✓ Balance transfer facilities<br>
+                        ✓ Part-payment without penalty<br>
+                        ✓ Doorstep service available
+                    </p>
+                    
+                    <button class="cta-button" onclick="alert('🏦 Apply for Best Loans!\n\n✅ Compare from Top Banks:\n• HDFC Bank - 7.5% onwards\n• ICICI Bank - 7.8% onwards\n• SBI - 8.0% onwards\n• Axis Bank - 8.2% onwards\n• Kotak Mahindra - 8.5% onwards\n\n💡 Loan Types Available:\n• Home Loan\n• Personal Loan\n• Car Loan\n• Education Loan\n• Business Loan\n\n🎯 Benefits:\n• Instant approval\n• Flexible tenure up to 30 years\n• Low processing fees\n• Balance transfer facility\n• Top-up loan options\n\n📞 Apply now and get the best rates!')">Apply for Loan →</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <h3 class="results-title">📊 Your EMI Breakdown</h3>
+            <div class="results-grid">
+                <div class="result-card highlight">
+                    <div class="result-label">💰 Monthly EMI</div>
+                    <div class="result-value" id="monthlyEMI">₹12,345</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">Principal Amount</div>
+                    <div class="result-value" id="principalAmount">₹10,00,000</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">Total Interest</div>
+                    <div class="result-value" id="totalInterest">₹4,81,400</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">Total Payment</div>
+                    <div class="result-value" id="totalPayment">₹14,81,400</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Loan Repayment Breakdown</div>
+                <div class="pie-chart" id="pieChart">
+                    <svg width="280" height="280" viewBox="0 0 280 280">
+                        <circle cx="140" cy="140" r="100" fill="none" stroke="#667eea" stroke-width="80" 
+                                stroke-dasharray="0 628.3" id="principalCircle"/>
+                        <circle cx="140" cy="140" r="100" fill="none" stroke="#f093fb" stroke-width="80" 
+                                stroke-dasharray="0 628.3" stroke-dashoffset="0" id="interestCircle"/>
+                    </svg>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #667eea;"></div>
+                        <div>
+                            <div class="legend-label">Principal Amount</div>
+                            <div class="legend-value" id="legendPrincipal">₹10,00,000</div>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f093fb;"></div>
+                        <div>
+                            <div class="legend-label">Total Interest</div>
+                            <div class="legend-value" id="legendInterest">₹4,81,400</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>💡 <strong>Smart Tip:</strong> Lower interest rates and shorter tenure reduce total interest paid significantly!</p>
+    </div>
+
+    <script>
+        const loanAmountInput = document.getElementById('loanAmount');
+        const interestRateInput = document.getElementById('interestRate');
+        const tenureInput = document.getElementById('tenure');
+        
+        const loanAmountValue = document.getElementById('loanAmountValue');
+        const interestRateValue = document.getElementById('interestRateValue');
+        const tenureValue = document.getElementById('tenureValue');
+        
+        const monthlyEMI = document.getElementById('monthlyEMI');
+        const principalAmount = document.getElementById('principalAmount');
+        const totalInterest = document.getElementById('totalInterest');
+        const totalPayment = document.getElementById('totalPayment');
+        
+        const legendPrincipal = document.getElementById('legendPrincipal');
+        const legendInterest = document.getElementById('legendInterest');
+        
+        const principalCircle = document.getElementById('principalCircle');
+        const interestCircle = document.getElementById('interestCircle');
+
+        function formatCurrency(value) {
+            return '₹' + value.toLocaleString('en-IN', {
+                maximumFractionDigits: 0
+            });
+        }
+
+        function calculateEMI() {
+            const principal = parseFloat(loanAmountInput.value);
+            const annualRate = parseFloat(interestRateInput.value);
+            const years = parseInt(tenureInput.value);
+
+            // Update display values
+            loanAmountValue.textContent = formatCurrency(principal);
+            interestRateValue.textContent = annualRate.toFixed(1) + '%';
+            tenureValue.textContent = years + (years === 1 ? ' Year' : ' Years');
+
+            // Calculate EMI
+            const monthlyRate = annualRate / 12 / 100;
+            const numberOfMonths = years * 12;
+
+            // EMI = P × r × (1 + r)^n / ((1 + r)^n - 1)
+            let emi;
+            if (monthlyRate === 0) {
+                emi = principal / numberOfMonths;
+            } else {
+                emi = principal * monthlyRate * Math.pow(1 + monthlyRate, numberOfMonths) / 
+                      (Math.pow(1 + monthlyRate, numberOfMonths) - 1);
+            }
+
+            const totalPaymentAmount = emi * numberOfMonths;
+            const totalInterestAmount = totalPaymentAmount - principal;
+
+            // Update results
+            monthlyEMI.textContent = formatCurrency(emi);
+            principalAmount.textContent = formatCurrency(principal);
+            totalInterest.textContent = formatCurrency(totalInterestAmount);
+            totalPayment.textContent = formatCurrency(totalPaymentAmount);
+
+            // Update legend
+            legendPrincipal.textContent = formatCurrency(principal);
+            legendInterest.textContent = formatCurrency(totalInterestAmount);
+
+            // Update pie chart
+            updatePieChart(principal, totalInterestAmount);
+        }
+
+        function updatePieChart(principal, interest) {
+            const total = principal + interest;
+            const radius = 100;
+            const circumference = 2 * Math.PI * radius;
+
+            const principalPercentage = (principal / total) * 100;
+            const interestPercentage = (interest / total) * 100;
+
+            const principalDash = (principalPercentage / 100) * circumference;
+            const interestDash = (interestPercentage / 100) * circumference;
+
+            // Update principal circle (starts at top)
+            principalCircle.setAttribute('stroke-dasharray', `${principalDash} ${circumference}`);
+            
+            // Update interest circle (starts after principal)
+            interestCircle.setAttribute('stroke-dasharray', `${interestDash} ${circumference}`);
+            interestCircle.setAttribute('stroke-dashoffset', `-${principalDash}`);
+        }
+
+        // Event listeners
+        loanAmountInput.addEventListener('input', calculateEMI);
+        interestRateInput.addEventListener('input', calculateEMI);
+        tenureInput.addEventListener('input', calculateEMI);
+
+        // Initial calculation
+        calculateEMI();
+    </script>
+</body>
+</html>
