@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAGR Calculator 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .calculator-card {
+            background: white;
+            border-radius: 20px;
+            padding: 45px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7e22ce;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px 15px 14px 35px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.05em;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #7e22ce;
+            box-shadow: 0 0 0 4px rgba(126, 34, 206, 0.1);
+        }
+
+        .results {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 35px;
+            color: white;
+        }
+
+        .results-header {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            opacity: 0.95;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .result-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .cagr-highlight {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .cagr-highlight .result-value {
+            font-size: 2.5em;
+            color: #fff;
+        }
+
+        .affiliate-section {
+            background: white;
+            border-radius: 20px;
+            padding: 45px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+
+        .affiliate-graphic {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5em;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .affiliate-section h2 {
+            color: #2c3e50;
+            margin-bottom: 18px;
+            font-size: 2em;
+        }
+
+        .affiliate-tagline {
+            color: #7e22ce;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .affiliate-section p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 1.08em;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.15em;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 35px;
+        }
+
+        .benefit-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .benefit-icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+        }
+
+        .benefit-item h3 {
+            color: #2c3e50;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .benefit-item p {
+            color: #666;
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        .stats-banner {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .calculator-card, .affiliate-section {
+                padding: 25px;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cagr-highlight {
+                grid-column: 1;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .result-value {
+                font-size: 1.5em;
+            }
+
+            .cagr-highlight .result-value {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📈 CAGR Calculator</h1>
+            <p>Calculate Your Compound Annual Growth Rate</p>
+        </div>
+
+        <div class="calculator-card">
+            <form id="cagrForm">
+                <div class="form-group">
+                    <label for="beginningValue">Beginning Value (₹)</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">₹</span>
+                        <input type="number" id="beginningValue" placeholder="Enter initial investment" min="0" step="1000" value="100000">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="endingValue">Ending Value (₹)</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">₹</span>
+                        <input type="number" id="endingValue" placeholder="Enter final value" min="0" step="1000" value="250000">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="years">Investment Period (Years)</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">📅</span>
+                        <input type="number" id="years" placeholder="Enter number of years" min="0.1" step="0.1" value="5">
+                    </div>
+                </div>
+
+                <div class="results">
+                    <div class="results-header">Your Investment Growth Summary</div>
+                    <div class="result-grid">
+                        <div class="result-item cagr-highlight">
+                            <div class="result-label">CAGR (Compound Annual Growth Rate)</div>
+                            <div class="result-value" id="cagrValue">0.00%</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Total Gain</div>
+                            <div class="result-value" id="totalGain">₹0</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Final Value</div>
+                            <div class="result-value" id="finalValue">₹0</div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="affiliate-section">
+            <div class="affiliate-graphic">🚀</div>
+            <h2>Supercharge Your Wealth!</h2>
+            <div class="affiliate-tagline">Turn Good Returns into Great Returns</div>
+            <p>Your CAGR is just the beginning. Our expert wealth managers and investment platforms can help you optimize your portfolio, discover high-growth opportunities, and build lasting wealth with personalized strategies.</p>
+            
+            <div class="stats-banner">
+                <div class="stat">
+                    <div class="stat-value">10L+</div>
+                    <div class="stat-label">Happy Investors</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">₹500Cr+</div>
+                    <div class="stat-label">Assets Managed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">15%+</div>
+                    <div class="stat-label">Avg. Returns</div>
+                </div>
+            </div>
+
+            <div class="benefits">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>Smart Portfolio</h3>
+                    <p>AI-driven diversification strategies</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">💎</div>
+                    <h3>Premium Insights</h3>
+                    <p>Exclusive market research & analysis</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🛡️</div>
+                    <h3>Risk Management</h3>
+                    <p>Protect & grow your wealth</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⚡</div>
+                    <h3>Zero Commission</h3>
+                    <p>Start investing with no hidden fees</p>
+                </div>
+            </div>
+
+            <a href="#" class="cta-button" onclick="event.preventDefault(); alert('Connect with Premium Platforms:\n\n🌟 Groww - Zero Commission Trading\n🌟 Zerodha - India\'s Largest Broker\n🌟 ET Money - Mutual Fund Experts\n🌟 Smallcase - Thematic Investing\n🌟 INDmoney - Wealth Management\n\nStart growing your wealth today!');">Start Growing Today →</a>
+        </div>
+    </div>
+
+    <script>
+        const beginningValueInput = document.getElementById('beginningValue');
+        const endingValueInput = document.getElementById('endingValue');
+        const yearsInput = document.getElementById('years');
+        const cagrValueSpan = document.getElementById('cagrValue');
+        const totalGainSpan = document.getElementById('totalGain');
+        const finalValueSpan = document.getElementById('finalValue');
+
+        function calculateCAGR() {
+            const beginningValue = parseFloat(beginningValueInput.value) || 0;
+            const endingValue = parseFloat(endingValueInput.value) || 0;
+            const years = parseFloat(yearsInput.value) || 0;
+
+            if (beginningValue > 0 && endingValue > 0 && years > 0) {
+                const cagr = (Math.pow(endingValue / beginningValue, 1 / years) - 1) * 100;
+                const totalGain = endingValue - beginningValue;
+
+                cagrValueSpan.textContent = `${cagr.toFixed(2)}%`;
+                totalGainSpan.textContent = `₹${Math.round(totalGain).toLocaleString('en-IN')}`;
+                finalValueSpan.textContent = `₹${Math.round(endingValue).toLocaleString('en-IN')}`;
+
+                cagrValueSpan.style.color = cagr >= 0 ? '#fff' : '#ff6b6b';
+            } else {
+                cagrValueSpan.textContent = '0.00%';
+                totalGainSpan.textContent = '₹0';
+                finalValueSpan.textContent = '₹0';
+            }
+        }
+
+        beginningValueInput.addEventListener('input', calculateCAGR);
+        endingValueInput.addEventListener('input', calculateCAGR);
+        yearsInput.addEventListener('input', calculateCAGR);
+
+        calculateCAGR();
+    </script>
+</body>
+</html>
