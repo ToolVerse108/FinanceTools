@@ -1,916 +1,1178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Tools Hub - Free Financial Calculators</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        /* Header Styles */
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 28px;
-            font-weight: 700;
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            font-size: 36px;
-        }
-
-        nav {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        nav a {
-            color: #555;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            padding: 8px 16px;
-            border-radius: 8px;
-        }
-
-        nav a:hover {
-            color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: #667eea;
-        }
-
-        /* Hero Section */
-        .hero {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 80px 30px;
-            text-align: center;
-            color: white;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            margin-bottom: 20px;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            animation: fadeInDown 0.8s ease;
-        }
-
-        .hero p {
-            font-size: 22px;
-            margin-bottom: 40px;
-            opacity: 0.95;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: fadeInUp 0.8s ease 0.2s both;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.8s ease 0.4s both;
-        }
-
-        .btn-primary, .btn-secondary {
-            padding: 16px 40px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: white;
-            color: #667eea;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: #667eea;
-        }
-
-        /* Stats Section */
-        .stats {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 40px 30px;
-            margin: 0 auto;
-            max-width: 1400px;
-            border-radius: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            color: white;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .stat-number {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        /* Tools Section */
-        .tools-section {
-            background: white;
-            padding: 80px 30px;
-        }
-
-        .section-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-header h2 {
-            font-size: 42px;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .section-header p {
-            font-size: 18px;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Search Bar */
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 50px;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 18px 50px 18px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 50px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 20px;
-            color: #999;
-        }
-
-        /* Category Tabs */
-        .category-tabs {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 50px;
-        }
-
-        .category-tab {
-            padding: 12px 28px;
-            border-radius: 50px;
-            background: #f5f5f5;
-            color: #555;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .category-tab:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .category-tab.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        /* Tools Grid */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .tool-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-            border-color: #667eea;
-        }
-
-        .tool-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-
-        .tool-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 12px;
-        }
-
-        .tool-description {
-            font-size: 15px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            flex-grow: 1;
-        }
-
-        .tool-tag {
-            display: inline-block;
-            padding: 6px 14px;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-
-        /* Features Section */
-        .features-section {
-            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            padding: 80px 30px;
-            color: white;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            margin-top: 50px;
-        }
-
-        .feature-item {
-            text-align: center;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-item:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 56px;
-            margin-bottom: 20px;
-        }
-
-        .feature-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .feature-description {
-            font-size: 15px;
-            opacity: 0.95;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: white;
-            padding: 80px 30px;
-            text-align: center;
-        }
-
-        .cta-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .cta-content h2 {
-            font-size: 42px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .cta-content p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 40px;
-        }
-
-        /* Footer */
-        footer {
-            background: #2d3436;
-            color: white;
-            padding: 60px 30px 30px;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-section h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 12px;
-        }
-
-        .footer-section a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: white;
-            padding-left: 5px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 968px) {
-            .hero h1 {
-                font-size: 42px;
-            }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .section-header h2 {
-                font-size: 32px;
-            }
-
-            .tools-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
-
-            nav {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: white;
-                flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            }
-
-            nav.active {
-                display: flex;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .stats {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            }
-        }
-
-        @media (max-width: 640px) {
-            .hero h1 {
-                font-size: 32px;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-
-            .tools-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .category-tabs {
-                gap: 10px;
-            }
-
-            .category-tab {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Prem_AI – Divine Romantic Gifting Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Prem_AI is your divine romantic gifting guide, inspired by the eternal love of Radha & Krishna. Discover soulful, personalised gift ideas for your beloved." />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-deep: #041119;
+      --bg-teal: #0b2f3a;
+      --bg-soft-gold: #f3d19a;
+      --accent-teal: #138a9b;
+      --accent-teal-soft: #3ca9b7;
+      --accent-gold: #f6c56a;
+      --accent-orange: #e0733a;
+      --accent-rose: #f48a6a;
+      --text-light: #fff9ec;
+      --text-soft: #e9dac1;
+      --border-glow: rgba(246, 197, 106, 0.6);
+      --glass: rgba(5, 26, 39, 0.82);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-light);
+      background:
+        radial-gradient(circle at 10% 0%, #174a5a 0, transparent 50%),
+        radial-gradient(circle at 80% 0%, #f1c777 0, transparent 60%),
+        radial-gradient(circle at 0% 80%, #0f3543 0, transparent 55%),
+        radial-gradient(circle at 100% 100%, #e1733b 0, transparent 55%),
+        linear-gradient(145deg, var(--bg-deep), #061821 60%, #130d09 100%);
+      min-height: 100vh;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Soft mist overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.06), transparent 60%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 18px 64px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 16px;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #fbe2ac, #f0b75b 45%, #0f3543 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 18px rgba(246, 197, 106, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-icon::after {
+      content: "";
+      position: absolute;
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(circle at 10% 10%, rgba(240, 246, 255, 0.18), transparent 60%);
+      mix-blend-mode: screen;
+    }
+
+    .brand-icon span {
+      font-family: "Playfair Display", serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: #1a2024;
+      text-shadow: 0 0 8px rgba(250, 226, 180, 0.9);
+    }
+
+    .brand-text-main {
+      font-family: "Playfair Display", serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-text-sub {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-soft);
+      opacity: 0.9;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.9rem;
+    }
+
+    nav a {
+      opacity: 0.82;
+    }
+
+    nav a:hover {
+      opacity: 1;
+    }
+
+    .nav-cta {
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(246, 197, 106, 0.7);
+      background: radial-gradient(circle at 0 0, rgba(248, 233, 201, 0.2), transparent 60%);
+      box-shadow: 0 0 12px rgba(246, 197, 106, 0.5);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 72px;
+    }
+
+    /* HERO */
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-visual {
+        order: -1;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        align-self: stretch;
+        justify-content: flex-end;
+      }
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 11px 4px 4px;
+      border-radius: 999px;
+      border: 1px solid rgba(246, 197, 106, 0.6);
+      background: radial-gradient(circle at 0 50%, rgba(243, 209, 154, 0.18), transparent 60%);
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 16px;
+    }
+
+    .hero-pill-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #fce9bf, #e5a743);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #301a0c;
+      font-size: 0.8rem;
+      box-shadow: 0 0 12px rgba(243, 209, 154, 0.8);
+    }
+
+    .hero h1 {
+      font-family: "Playfair Display", serif;
+      font-size: 2.65rem;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      text-shadow: 0 0 16px rgba(0, 0, 0, 0.55);
+    }
+
+    .hero h1 span.highlight {
+      background: linear-gradient(120deg, var(--accent-gold), var(--accent-rose));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-tagline {
+      font-size: 1rem;
+      color: var(--text-soft);
+      max-width: 480px;
+      margin-bottom: 22px;
+    }
+
+    .hero-mantra {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--accent-soft);
+      margin-bottom: 24px;
+      color: #f8e4bf;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .btn-main,
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+      box-shadow: 0 0 18px rgba(246, 197, 106, 0.8);
+      color: #2a1708;
+    }
+
+    .btn-main:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 26px rgba(246, 197, 106, 0.9);
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(120, 207, 225, 0.8);
+      background: linear-gradient(120deg, rgba(17, 122, 139, 0.1), rgba(5, 26, 39, 0.85));
+      color: var(--text-light);
+    }
+
+    .btn-ghost:hover {
+      background: radial-gradient(circle at 0 0, rgba(63, 189, 207, 0.36), rgba(5, 26, 39, 0.98));
+      transform: translateY(-1px);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      opacity: 0.9;
+      margin-top: 6px;
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-meta .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(240, 215, 164, 0.8);
+    }
+
+    /* HERO VISUAL CARD */
+
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-card {
+      position: relative;
+      background: radial-gradient(circle at 20% 0, rgba(243, 209, 154, 0.14), rgba(4, 17, 25, 0.96));
+      border-radius: 32px;
+      padding: 16px 16px 18px;
+      border: 1px solid rgba(246, 197, 106, 0.55);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(246, 197, 106, 0.38);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 10% 0, rgba(240, 227, 215, 0.25), transparent 58%),
+        radial-gradient(circle at 90% 100%, rgba(224, 115, 59, 0.4), transparent 58%);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    .hero-card-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.02rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero-card-tag {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(63, 189, 207, 0.85);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      background: radial-gradient(circle at 0 0, rgba(63, 189, 207, 0.26), transparent 65%);
+    }
+
+    .hero-image-wrap {
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid rgba(246, 197, 106, 0.55);
+      position: relative;
+      background: radial-gradient(circle at 50% 0, #0b3747, #0b2f3a 60%, #2b1308 100%);
+      margin-bottom: 12px;
+    }
+
+    .hero-image-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 40% 0, rgba(229, 179, 94, 0.35), transparent 60%),
+        radial-gradient(circle at 20% 100%, rgba(20, 121, 137, 0.45), transparent 60%);
+      opacity: 0.8;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    .hero-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      filter: saturate(1.08) contrast(1.02);
+    }
+
+    .hero-image-note {
+      font-size: 0.68rem;
+      color: var(--text-soft);
+      opacity: 0.85;
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hero-card-footer {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    .hero-card-footer strong {
+      color: var(--accent-gold);
+      font-weight: 500;
+    }
+
+    .hero-card-peacock {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-card-peacock-feather {
+      width: 18px;
+      height: 18px;
+      border-radius: 50% 50% 50% 0;
+      background:
+        radial-gradient(circle at 30% 25%, #fcedc0 0, #f3d19a 22%, transparent 50%),
+        radial-gradient(circle at 52% 52%, #151e47 0, #2a7c94 16%, #f6c56a 40%, transparent 67%);
+      box-shadow: 0 0 12px rgba(243, 209, 154, 0.9);
+      transform: rotate(-18deg);
+    }
+
+    /* SECTION STYLES */
+
+    section {
+      position: relative;
+    }
+
+    .section-heading {
+      font-family: "Playfair Display", serif;
+      font-size: 1.7rem;
+      margin-bottom: 12px;
+    }
+
+    .section-heading span {
+      background: linear-gradient(120deg, var(--accent-gold), var(--accent-teal-soft));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 0.92rem;
+      max-width: 520px;
+      color: var(--text-soft);
+      margin-bottom: 24px;
+    }
+
+    .section-card-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .section-card-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 650px) {
+      .section-card-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: var(--glass);
+      border-radius: 22px;
+      padding: 16px 16px 18px;
+      border: 1px solid rgba(9, 64, 79, 0.9);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at 0 0, rgba(63, 189, 207, 0.24), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(246, 197, 106, 0.34), transparent 55%);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    .card-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .card-body {
+      font-size: 0.86rem;
+      color: var(--text-soft);
+    }
+
+    .card-badges {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      font-size: 0.7rem;
+    }
+
+    .badge {
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(243, 209, 154, 0.6);
+      background: radial-gradient(circle at 0 0, rgba(243, 209, 154, 0.26), transparent 60%);
+      white-space: nowrap;
+    }
+
+    .badge-soft {
+      border-color: rgba(63, 189, 207, 0.7);
+      background: radial-gradient(circle at 0 0, rgba(63, 189, 207, 0.2), transparent 60%);
+    }
+
+    /* HOW IT WORKS */
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .steps {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .step {
+      padding: 16px 16px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(243, 209, 154, 0.45);
+      background: linear-gradient(140deg, rgba(4, 17, 25, 0.98), rgba(10, 55, 67, 0.98));
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.77);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step::before {
+      content: "";
+      position: absolute;
+      inset: -35%;
+      background:
+        radial-gradient(circle at 10% 0, rgba(243, 209, 154, 0.22), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(224, 115, 59, 0.24), transparent 55%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .step-number {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(243, 209, 154, 0.7);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+      background: radial-gradient(circle at 30% 0, rgba(243, 209, 154, 0.9), #f1b662);
+      color: #2a1708;
+      font-weight: 600;
+      box-shadow: 0 0 16px rgba(243, 209, 154, 0.8);
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .step-text {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+    }
+
+    /* GIFT GRID */
+
+    .gift-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .gift-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 650px) {
+      .gift-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .gift-tile {
+      border-radius: 20px;
+      border: 1px solid rgba(9, 64, 79, 0.9);
+      background: radial-gradient(circle at 0 0, rgba(63, 189, 207, 0.24), rgba(4, 17, 25, 0.96));
+      padding: 14px 14px 16px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.8);
+      font-size: 0.84rem;
+    }
+
+    .gift-tile h4 {
+      font-family: "Playfair Display", serif;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .gift-tile span {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      display: block;
+      margin-bottom: 5px;
+      opacity: 0.9;
+    }
+
+    /* TESTIMONIALS */
+
+    .testimonials {
+      display: grid;
+      grid-template-columns: 1.2fr 1.1fr;
+      gap: 26px;
+    }
+
+    @media (max-width: 880px) {
+      .testimonials {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .love-score {
+      border-radius: 24px;
+      padding: 16px 16px 18px;
+      border: 1px solid rgba(243, 209, 154, 0.8);
+      background: linear-gradient(160deg, rgba(243, 209, 154, 0.14), rgba(4, 17, 25, 0.96));
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.8);
+      font-size: 0.88rem;
+    }
+
+    .love-score strong {
+      color: var(--accent-gold);
+    }
+
+    .love-meter {
+      margin-top: 12px;
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(7, 39, 50, 0.9);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .love-meter-fill {
+      position: absolute;
+      inset: 0;
+      width: 86%;
+      background: linear-gradient(90deg, var(--accent-teal), var(--accent-gold), var(--accent-rose));
+      box-shadow: 0 0 18px rgba(246, 197, 106, 0.9);
+    }
+
+    .love-score-footer {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-top: 8px;
+    }
+
+    .testimonial-cards {
+      display: grid;
+      gap: 12px;
+    }
+
+    .testimonial {
+      border-radius: 18px;
+      padding: 12px 13px 14px;
+      border: 1px solid rgba(9, 64, 79, 0.9);
+      background: radial-gradient(circle at 0 0, rgba(63, 189, 207, 0.18), rgba(6, 24, 37, 1));
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.85);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonial::before {
+      content: "";
+      position: absolute;
+      inset: -35%;
+      background:
+        radial-gradient(circle at 0 0, rgba(243, 209, 154, 0.18), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(224, 115, 59, 0.2), transparent 55%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .testimonial-name {
+      font-size: 0.83rem;
+      margin-top: 6px;
+      color: var(--accent-gold);
+    }
+
+    /* CTA SECTION */
+
+    .cta {
+      margin-top: 16px;
+      border-radius: 26px;
+      padding: 20px 18px 22px;
+      border: 1px solid rgba(243, 209, 154, 0.85);
+      background: radial-gradient(circle at 30% 0, rgba(243, 209, 154, 0.26), transparent 60%), rgba(4, 17, 25, 0.98);
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(246, 197, 106, 0.5);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .cta-text {
+      max-width: 520px;
+    }
+
+    .cta-text strong {
+      color: var(--accent-gold);
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(10, 55, 67, 0.95);
+      font-size: 0.76rem;
+      color: var(--text-soft);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    footer a {
+      opacity: 0.8;
+    }
+
+    footer a:hover {
+      opacity: 1;
+    }
+
+    /* SMALL DECOR ELEMENTS */
+
+    .floating-orb {
+      position: fixed;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 0, rgba(243, 209, 154, 0.32), transparent 60%);
+      opacity: 0.4;
+      filter: blur(2px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .floating-orb.orb-1 {
+      top: 12%;
+      left: -60px;
+    }
+
+    .floating-orb.orb-2 {
+      bottom: -40px;
+      right: -40px;
+      background: radial-gradient(circle at 50% 0, rgba(17, 122, 139, 0.6), transparent 68%);
+    }
+
+    /* ANCHOR TARGETS */
+    section[id] {
+      scroll-margin-top: 80px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Header -->
+  <!-- Soft glowing mists -->
+  <div class="floating-orb orb-1"></div>
+  <div class="floating-orb orb-2"></div>
+
+  <div class="page">
     <header>
-        <div class="header-container">
-            <a href="#" class="logo">
-                <span class="logo-icon">💰</span>
-                <span>Finance Tools Hub</span>
-            </a>
-            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-            <nav id="mainNav">
-                <a href="#home">Home</a>
-                <a href="#tools">Tools</a>
-                <a href="#features">Features</a>
-            </nav>
+      <div class="brand-mark">
+        <div class="brand-icon">
+          <span>ॐ</span>
         </div>
+        <div>
+          <div class="brand-text-main">Prem_AI</div>
+          <div class="brand-text-sub">Divine Romantic Gifting</div>
+        </div>
+      </div>
+
+      <nav>
+        <a href="#about">About</a>
+        <a href="#how">How it Works</a>
+        <a href="#gifts">Gift Styles</a>
+        <a href="#testimonials">Love Stories</a>
+        <a href="#start" class="nav-cta">Start Now</a>
+      </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Smart Financial Planning Made Easy</h1>
-        <p>Free, powerful calculators for all your financial needs. Make informed decisions with our comprehensive suite of tools.</p>
-        <div class="hero-buttons">
-            <a href="#tools" class="btn-primary">Explore Tools</a>
-            <a href="#features" class="btn-secondary">Learn More</a>
-        </div>
-    </section>
+    <main>
+      <!-- HERO -->
+      <section class="hero" id="top">
+        <div>
+          <div class="hero-pill">
+            <div class="hero-pill-icon">💫</div>
+            <span>Inspired by the eternal love of Radha &amp; Krishna</span>
+          </div>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="stat-item">
-            <div class="stat-number">15+</div>
-            <div class="stat-label">Financial Tools</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">100%</div>
-            <div class="stat-label">Free Forever</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">50K+</div>
-            <div class="stat-label">Users Worldwide</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">24/7</div>
-            <div class="stat-label">Available</div>
-        </div>
-    </section>
+          <h1>
+            A <span class="highlight">divine gifting guide</span>
+            for every shade of your love.
+          </h1>
 
-    <!-- Tools Section -->
-    <section class="tools-section" id="tools">
-        <div class="section-container">
-            <div class="section-header">
-                <h2>Our Financial Calculators</h2>
-                <p>Choose from our comprehensive collection of free financial tools</p>
+          <p class="hero-tagline">
+            Prem_AI listens to your love story and suggests soulful, personalised gifts –
+            blending romance with devotion, like a modern Krishna–Radha vibration in every surprise.
+          </p>
+
+          <p class="hero-mantra">
+            “Not just gifts – sacred gestures of प्रेम, crafted for the one who holds your heart.”
+          </p>
+
+          <div class="hero-actions">
+            <a href="#start" class="btn-main">
+              Start Your Love Session
+              <span>➝</span>
+            </a>
+            <a href="#gifts" class="btn-ghost">
+              Explore Romantic Gift Types
+            </a>
+          </div>
+
+          <div class="hero-meta">
+            <span><span class="dot"></span> Perfect for couples, crushes &amp; long-distance love</span>
+            <span><span class="dot"></span> Vibe: spiritual · romantic · playful</span>
+          </div>
+        </div>
+
+        <!-- VISUAL CARD -->
+        <div class="hero-visual">
+          <div class="hero-card">
+            <div class="hero-card-top">
+              <div>
+                <div class="hero-card-title">Divine Love Moodboard</div>
+                <div style="font-size:0.75rem;color:var(--text-soft);">Peacock blues · Temple gold · Sacred warmth</div>
+              </div>
+              <span class="hero-card-tag">Radha–Krishna Vibes</span>
             </div>
 
-            <!-- Search Bar -->
-            <div class="search-container">
-                <input type="text" class="search-input" id="searchInput" placeholder="Search for calculators..." onkeyup="filterTools()">
-                <span class="search-icon">🔍</span>
+            <div class="hero-image-wrap">
+              <!-- Replace the src with your hosted Radha–Krishna inspired artwork for GitHub Pages -->
+              <img
+                class="hero-image"
+                src="https://via.placeholder.com/640x900.png?text=Add+your+Krishna%E2%80%93Radha+Artwork+Here"
+                alt="Divine romantic artwork in peacock blue, teal, and gold tones"
+              />
+              <div class="hero-image-glow"></div>
             </div>
 
-            <!-- Category Tabs -->
-            <div class="category-tabs">
-                <div class="category-tab active" onclick="filterCategory('all')">All Tools</div>
-                <div class="category-tab" onclick="filterCategory('investment')">Investments</div>
-                <div class="category-tab" onclick="filterCategory('retirement')">Retirement</div>
-                <div class="category-tab" onclick="filterCategory('savings')">Savings</div>
-                <div class="category-tab" onclick="filterCategory('loan')">Loans</div>
+            <div class="hero-image-note">
+              <span>Upload your own Krishna–Radha style artwork here to complete the brand aura.</span>
+              <span>Palette: Peacock teal · Deep blue · Antique gold · Warm sandalwood mist</span>
             </div>
 
-            <!-- Tools Grid -->
-            <div class="tools-grid" id="toolsGrid">
-                <!-- SIP Calculator -->
-                <a href="/FinanceTools/sip.html" class="tool-card" data-category="investment" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">📈</div>
-    <div class="tool-title">SIP Calculator</div>
-    <div class="tool-description">Calculate returns on your systematic investment plans with monthly contributions and compound growth.</div>
-    <div>
-        <span class="tool-tag">Investment</span>
-        <span class="tool-tag">Popular</span>
-    </div>
-</a>
-
-
-                <!-- Lumpsum Calculator -->
-                <a href="/FinanceTools/lmpsm-cal.html" class="tool-card" data-category="investment" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">💰</div>
-    <div class="tool-title">Lumpsum Calculator</div>
-    <div class="tool-description">Calculate future value of your one-time investment with compound interest over time.</div>
-    <div>
-        <span class="tool-tag">Investment</span>
-    </div>
-</a>
- 
-                <!-- SWP Calculator -->
-                <a href="/FinanceTools/swp.html" class="tool-card" data-category="retirement" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">💸</div>
-    <div class="tool-title">SWP Calculator</div>
-    <div class="tool-description">Plan systematic withdrawals from your investments while earning returns on remaining corpus.</div>
-    <div>
-        <span class="tool-tag">Retirement</span>
-    </div>
-</a>
-
-
-                <!-- STP Calculator -->
-                <a href="/FinanceTools/stp.html" class="tool-card" data-category="investment" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">🔄</div>
-    <div class="tool-title">STP Calculator</div>
-    <div class="tool-description">Transfer funds systematically between schemes while optimizing returns on both portfolios.</div>
-    <div>
-        <span class="tool-tag">Investment</span>
-    </div>
-</a>
-
-                <!-- Mutual Fund Return Calculator -->
-                <a href="/FinanceTools/mtualfnd-cal.html" class="tool-card" data-category="investment" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">📊</div>
-    <div class="tool-title">Mutual Fund Returns</div>
-    <div class="tool-description">Calculate CAGR and absolute returns on your mutual fund investments accurately.</div>
-    <div>
-        <span class="tool-tag">Investment</span>
-        <span class="tool-tag">Popular</span>
-    </div>
-</a>
-
-                <!-- NPS Calculator -->
-                <a href="/FinanceTools/nps.html" class="tool-card" data-category="retirement" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">🏦</div>
-    <div class="tool-title">NPS Calculator</div>
-    <div class="tool-description">Plan your retirement with National Pension System projections and monthly pension estimates.</div>
-    <div>
-        <span class="tool-tag">Retirement</span>
-    </div>
-</a>
-
-                <!-- PPF Calculator -->
-                <a href="/FinanceTools/ppf.html" class="tool-card" data-category="savings" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">🏛️</div>
-    <div class="tool-title">PPF Calculator</div>
-    <div class="tool-description">Calculate Public Provident Fund maturity with tax-free returns and government backing.</div>
-    <div>
-        <span class="tool-tag">Savings</span>
-        <span class="tool-tag">Tax Free</span>
-    </div>
-</a>
-
-                <!-- EPF Calculator -->
-                <a href="/FinanceTools/epf.html" class="tool-card" data-category="retirement" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">💼</div>
-    <div class="tool-title">EPF Calculator</div>
-    <div class="tool-description">Employee Provident Fund calculator with employer contribution and interest projections.</div>
-    <div>
-        <span class="tool-tag">Retirement</span>
-    </div>
-</a>
-
-                <!-- RD Calculator -->
-                <a href="/FinanceTools/rd.html" class="tool-card" data-category="savings" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">🏦</div>
-    <div class="tool-title">RD Calculator</div>
-    <div class="tool-description">Recurring Deposit calculator for disciplined monthly savings with guaranteed returns.</div>
-    <div>
-        <span class="tool-tag">Savings</span>
-    </div>
-</a>
-
-                <!-- FD Calculator -->
-                <a href="/FinanceTools/fd.html" class="tool-card" data-category="savings" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">💎</div>
-    <div class="tool-title">FD Calculator</div>
-    <div class="tool-description">Fixed Deposit calculator with quarterly compounding and maturity amount projections.</div>
-    <div>
-        <span class="tool-tag">Savings</span>
-        <span class="tool-tag">Safe</span>
-    </div>
-</a>
-
-                <!-- EMI Calculator -->
-                <a href="/FinanceTools/emi-calculator.html" class="tool-card" data-category="loan" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">🏠</div>
-    <div class="tool-title">EMI Calculator</div>
-    <div class="tool-description">Calculate monthly installments for home, car, or personal loans with amortization schedule.</div>
-    <div>
-        <span class="tool-tag">Loan</span>
-        <span class="tool-tag">Popular</span>
-    </div>
-</a>
-
-                <!-- Retirement Calculator -->
-                <a href="/FinanceTools/retirement-planner.html" class="tool-card" data-category="retirement" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">🌴</div>
-    <div class="tool-title">Retirement Planner</div>
-    <div class="tool-description">Comprehensive retirement planning with inflation adjustments and corpus requirements.</div>
-    <div>
-        <span class="tool-tag">Retirement</span>
-    </div>
-</a>
-
-                <!-- Tax Calculator -->
-                <a href="/FinanceTools/tax-calculator.html" class="tool-card" data-category="savings" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">📋</div>
-    <div class="tool-title">Tax Calculator</div>
-    <div class="tool-description">Calculate income tax liabilities under old and new tax regimes with deductions.</div>
-    <div>
-        <span class="tool-tag">Tax</span>
-    </div>
-</a>
-
-                <!-- CAGR Calculator -->
-                <a href="/FinanceTools/cagr-calculator.html" class="tool-card" data-category="investment" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">📉</div>
-    <div class="tool-title">CAGR Calculator</div>
-    <div class="tool-description">Calculate Compound Annual Growth Rate for your investments and track performance.</div>
-    <div>
-        <span class="tool-tag">Investment</span>
-    </div>
-</a>
-
-                <!-- HRA Calculator -->
-                <a href="/FinanceTools/hra-calculator.html" class="tool-card" data-category="savings" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">🏢</div>
-    <div class="tool-title">HRA Calculator</div>
-    <div class="tool-description">Calculate House Rent Allowance exemption and optimize your tax savings effectively.</div>
-    <div>
-        <span class="tool-tag">Tax</span>
-    </div>
-</a>
-
-                <!-- Gratuity Calculator -->
-                <a href="/FinanceTools/gratuity-calculator.html" class="tool-card" data-category="retirement" style="text-decoration: none; color: inherit;">
-    <div class="tool-icon">🎁</div>
-    <div class="tool-title">Gratuity Calculator</div>
-    <div class="tool-description">Calculate gratuity amount based on salary and years of service at retirement.</div>
-    <div>
-        <span class="tool-tag">Retirement</span>
-    </div>
-</a>
-
+            <div class="hero-card-footer">
+              <div>
+                <strong>Prem_AI Signature:</strong> Spiritual romance with playful devotion.
+              </div>
+              <div class="hero-card-peacock">
+                <div class="hero-card-peacock-feather"></div>
+                <span>Radhe Radhe 💙</span>
+              </div>
             </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 style="color: white;">Why Choose Our Tools?</h2>
-                <p style="color: rgba(255,255,255,0.95);">Professional-grade calculators designed for accuracy and ease of use</p>
+      <!-- ABOUT -->
+      <section id="about">
+        <h2 class="section-heading">
+          What is <span>Prem_AI</span>?
+        </h2>
+        <p class="section-subtitle">
+          Prem_AI is a love-and-romance-only gifting guide. Think of it as a calm, wise friend
+          who understands both your दिल and your beloved’s दिल – then designs a gift idea that
+          feels like a bhajan of your relationship.
+        </p>
+
+        <div class="section-card-row">
+          <div class="card">
+            <div class="card-label">FOR WHOM</div>
+            <div class="card-title">For your person, in every universe</div>
+            <p class="card-body">
+              Whether it’s a new crush, a shy proposal, a long-distance soulmate or your forever
+              partner, Prem_AI tunes into your story and suggests gifts that speak your shared language of love.
+            </p>
+            <div class="card-badges">
+              <span class="badge">New Love</span>
+              <span class="badge">Anniversaries</span>
+              <span class="badge">Long-Distance</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">ENERGY</div>
+            <div class="card-title">Spiritual, yet fun &amp; filmy</div>
+            <p class="card-body">
+              The vibe is Radha–Krishna: divine, playful, musical. Expect ideas with flutes,
+              handwritten notes, temple-style aesthetics, starlit dates and heartfelt little rituals.
+            </p>
+            <div class="card-badges">
+              <span class="badge badge-soft">Peacock blue aura</span>
+              <span class="badge badge-soft">Temple gold glow</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">WHY</div>
+            <div class="card-title">Because love deserves more than “random gifts”</div>
+            <p class="card-body">
+              Forget last-minute generic presents. Prem_AI helps you plan gestures that feel
+              intentionally crafted – so your partner feels seen, chosen and deeply loved.
+            </p>
+            <div class="card-badges">
+              <span class="badge">Emotion-first</span>
+              <span class="badge">Story-based</span>
+              <span class="badge">Made with प्रेम</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section id="how">
+        <h2 class="section-heading">
+          How <span>Prem_AI</span> creates your gift plan
+        </h2>
+        <p class="section-subtitle">
+          When someone chats with Prem_AI, the experience should feel soft, sacred and simple.
+          Here’s the divine little flow behind every suggestion:
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-title">You share your love story</div>
+            <p class="step-text">
+              Tell Prem_AI about your bond – how you met, what your partner loves,
+              your budget, and which occasion is coming up. No judgment, only प्रेम.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-title">Prem_AI feels the vibe</div>
+            <p class="step-text">
+              The assistant senses your energy: romantic, spiritual, filmy, playful or shy.
+              It then combines this with the Radha–Krishna inspired moodboard to shape your gift style.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-title">You get a ready-to-act gift plan</div>
+            <p class="step-text">
+              Not just “buy this.” You receive a full plan – what to gift, how to present it,
+              what to write on the note, and tiny divine details that make them think:
+              “No one has ever done this for me.”
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- GIFT STYLES -->
+      <section id="gifts">
+        <h2 class="section-heading">
+          Gift ideas with <span>Krishna–Radha</span> energy
+        </h2>
+        <p class="section-subtitle">
+          Every idea from Prem_AI can be aligned with your budget – from small,
+          symbolic gestures to grand anniversary surprises. Here are some example
+          styles (the real assistant would personalise them fully):
+        </p>
+
+        <div class="gift-grid">
+          <div class="gift-tile">
+            <h4>“First Darshan” Date Box</h4>
+            <span>For new love &amp; shy proposals</span>
+            A curated box with a handwritten aarti-style love letter, a flute charm,
+            a small framed quote on प्रेम, and a playlist card titled
+            <em>“Jab se tum mile ho…”</em>.
+          </div>
+
+          <div class="gift-tile">
+            <h4>Long-Distance Temple Evening</h4>
+            <span>For far-away soulmates</span>
+            A synced video call ritual where you both light diyas, share gratitude notes,
+            and Prem_AI suggests coordinated gifts delivered to each other’s doors.
+          </div>
+
+          <div class="gift-tile">
+            <h4>Radha’s Secret Diary</h4>
+            <span>For old-school romantics</span>
+            A custom journal with prompts written by Prem_AI – you fill it over a month,
+            then gift it to your partner on a special day.
+          </div>
+
+          <div class="gift-tile">
+            <h4>Flute of Forgiveness</h4>
+            <span>For apologies &amp; healing</span>
+            A soft, devotional apology ritual with music, affirmation cards,
+            and a heartfelt script crafted for you by Prem_AI.
+          </div>
+
+          <div class="gift-tile">
+            <h4>“Seven Janams with You” Night</h4>
+            <span>For anniversaries</span>
+            A 7-part evening where each small surprise symbolises one जन्म of togetherness:
+            from food to memories to future promises.
+          </div>
+
+          <div class="gift-tile">
+            <h4>Secret Crush Prasad</h4>
+            <span>For sweet, subtle signals</span>
+            A simple but magical way to give prasad, a note &amp; a smile
+            that finally says what your heart has been whispering.
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS / SOCIAL PROOF -->
+      <section id="testimonials">
+        <h2 class="section-heading">
+          Blessed <span>love stories</span> guided by Prem_AI
+        </h2>
+        <p class="section-subtitle">
+          Imagine these as future reviews from couples who used your Prem_AI assistant.
+          Add real screenshots later, but keep the same divine, teal-and-gold aesthetic.
+        </p>
+
+        <div class="testimonials">
+          <div class="love-score">
+            <div style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:4px;">
+              Love Satisfaction Score
+            </div>
+            <p>
+              Couples say Prem_AI makes them feel
+              <strong>more understood, more adored &amp; more connected</strong>
+              through small but deeply intentional gifts.
+            </p>
+
+            <div class="love-meter">
+              <div class="love-meter-fill"></div>
+            </div>
+            <div class="love-score-footer">
+              Target: 90%+ “This felt so us” moments in every relationship guided by Prem_AI.
+            </div>
+          </div>
+
+          <div class="testimonial-cards">
+            <div class="testimonial">
+              “I gave my wife a Radha-inspired surprise evening, exactly as Prem_AI planned.
+              She had tears in her eyes and said, ‘This feels like our own little Vrindavan.’”
+              <div class="testimonial-name">— Future Prem_AI User · Anniversary Surprise</div>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">🎯</div>
-                    <div class="feature-title">100% Accurate</div>
-                    <div class="feature-description">Industry-standard formulas ensure precise calculations every time</div>
-                </div>
-
-                <div class="feature-item">
-                    <div class="feature-icon">🚀</div>
-                    <div class="feature-title">Lightning Fast</div>
-                    <div class="feature-description">Real-time calculations with instant results as you type</div>
-                </div>
-
-                <div class="feature-item">
-                    <div class="feature-icon">📱</div>
-                    <div class="feature-title">Mobile Friendly</div>
-                    <div class="feature-description">Fully responsive design works perfectly on all devices</div>
-                </div>
-
-                <div class="feature-item">
-                    <div class="feature-icon">🔒</div>
-                    <div class="feature-title">100% Private</div>
-                    <div class="feature-description">All calculations happen locally - no data stored or shared</div>
-                </div>
-
-                <div class="feature-item">
-                    <div class="feature-icon">💯</div>
-                    <div class="feature-title">Always Free</div>
-                    <div class="feature-description">No hidden charges, no subscriptions - completely free forever</div>
-                </div>
-
-                <div class="feature-item">
-                    <div class="feature-icon">🎨</div>
-                    <div class="feature-title">Beautiful Design</div>
-                    <div class="feature-description">Modern, intuitive interface makes financial planning enjoyable</div>
-                </div>
+            <div class="testimonial">
+              “Even in long distance, Prem_AI helped us feel spiritually closer.
+              The diya-lighting ritual and shared playlist made us feel like we were
+              under the same moon.”
+              <div class="testimonial-name">— Future Prem_AI User · Long-Distance Couple</div>
             </div>
-        </div>
-    </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="cta-content">
-            <h2>Ready to Take Control of Your Finances?</h2>
-            <p>Start using our free calculators today and make smarter financial decisions for a better tomorrow.</p>
-            <a href="#tools" class="btn-primary">Get Started Now</a>
+            <div class="testimonial">
+              “I’m usually bad at gifts. Prem_AI turned my confusion into a clear plan –
+              what to buy, how to decorate, what to say. She said it was the most
+              thoughtful evening of her life.”
+              <div class="testimonial-name">— Future Prem_AI User · Shy Romantic</div>
+            </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <!-- Footer -->
+      <!-- CTA / START -->
+      <section id="start">
+        <div class="cta">
+          <div class="cta-text">
+            <h2 class="section-heading" style="font-size:1.4rem;margin-bottom:6px;">
+              Ready to plan your next <span>Prem-filled surprise</span>?
+            </h2>
+            <p>
+              Connect with Prem_AI, share your love story, your budget (even simple gifts under ₹500),
+              and the divine vibe you want – romantic, spiritual, filmy or all three.
+              <strong>The assistant will reply with a step-by-step gift plan you can implement today.</strong>
+            </p>
+          </div>
+
+          <div class="cta-actions">
+            <a href="#" class="btn-main">
+              Chat with Prem_AI
+            </a>
+            <a href="#top" class="btn-ghost">
+              Back to Divine Top
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Finance Tools Hub</h3>
-                <p style="color: rgba(255,255,255,0.7); margin-top: 15px;">
-                    Your trusted companion for all financial calculations. Free, accurate, and easy to use
-                    financial calculators to simplify investing, budgeting, and money management for everyone.
-                </p>
-            </div>
-
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#tools">All Tools</a></li>
-                    <li><a href="#features">Features</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Popular Tools</h3>
-                <ul>
-                    <li><a href="#SIP Calculator">SIP Calculator</a></li>
-                    <li><a href="#EMI Calculator">EMI Calculator</a></li>
-                    <li><a href="#PPF Calculator">PPF Calculator</a></li>
-                    <li><a href="#NPS Calculator">NPS Calculator</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Resources</h3>
-                <ul>
-                    <li><a href="#">Financial Guide</a></li>
-                    <li><a href="#">Investment Tips</a></li>
-                    <li><a href="#">Tax Planning</a></li>
-                    <li><a href="#">FAQs</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2025 Finance Tools Hub. All rights reserved. Made with ❤️ for smarter financial planning.</p>
-        </div>
+      <span>Prem_AI · A romantic gifting experience inspired by Radha &amp; Krishna.</span>
+      <span>
+        Crafted with 💙, peacock feathers &amp; temple gold.
+      </span>
     </footer>
-
-    <script>
-        // Mobile Menu Toggle
-        function toggleMenu() {
-            const nav = document.getElementById('mainNav');
-            nav.classList.toggle('active');
-        }
-
-        // Filter tools by category
-        let currentCategory = 'all';
-
-        function filterCategory(category) {
-            currentCategory = category;
-            const tabs = document.querySelectorAll('.category-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            const cards = document.querySelectorAll('.tool-card');
-            cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Search functionality
-        function filterTools() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.tool-card');
-            
-            cards.forEach(card => {
-                const title = card.querySelector('.tool-title').textContent.toLowerCase();
-                const description = card.querySelector('.tool-description').textContent.toLowerCase();
-                const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
-                const matchesCategory = currentCategory
+  </div>
+</body>
+</html>
